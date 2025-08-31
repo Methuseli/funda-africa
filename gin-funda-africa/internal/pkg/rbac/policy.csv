@@ -1,0 +1,7 @@
+# role, object, action
+student, courses, view
+teacher, courses, create
+teacher, courses, update
+tutor, lessons, teach
+org_rep, organizations, create
+admin, *, *
