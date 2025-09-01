@@ -14,7 +14,7 @@ type User struct {
 	ID             uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	Username       string    `json:"username" gorm:"unique;not null"`
 	Email          string    `json:"email" gorm:"unique"`
-	Password       string    `json:"password" gorm:"not null"`
+	Password       string    `json:"password" gorm:"not null" copier:"-"`
 	PhoneNumber    string    `json:"phone_number"`
 	FirstName      string    `json:"first_name"`
 	LastName       string    `json:"last_name"`
@@ -22,7 +22,7 @@ type User struct {
 	Role           string    `json:"role"`
 	ProfilePicture string    `json:"profile_picture"`
 	DateOfBirth    *time.Time
-	Gender         *string
+	Gender         string
 	CountryCode    string    `gorm:"size:2;not null"`
 	CreatedAt      time.Time `gorm:"autoCreateTime"`
 	UpdatedAt      time.Time `gorm:"autoUpdateTime"`

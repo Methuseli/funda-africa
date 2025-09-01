@@ -5,6 +5,8 @@ import (
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
+
+    Log "github.com/sirupsen/logrus"
 )
 
 func RequirePermission(enforcer *casbin.Enforcer) gin.HandlerFunc {
@@ -18,6 +20,7 @@ func RequirePermission(enforcer *casbin.Enforcer) gin.HandlerFunc {
 
         obj := c.FullPath() // The route path
         act := c.Request.Method // HTTP method
+        Log.Debugf("path and act: %s, %s", obj, act)
 
         allowed, err := enforcer.Enforce(role, obj, act)
         if err != nil {

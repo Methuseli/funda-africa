@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"gin-funda-africa/internal/modules/users/dto"
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/repository"
 	"gin-funda-africa/internal/modules/users/services"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 type SubscriptionPlanController struct {
@@ -18,6 +20,23 @@ func NewSubscriptionPlanController(s *services.SubscriptionPlanService) *Subscri
 	return &SubscriptionPlanController{service: s}
 }
 
+
+// @BasePath /api/v1
+
+// Create godoc
+// @Security CookieAuth
+// @Summary Add Subscription Plan
+// @Description Subscription plan management
+// @Tags subscription plan
+// @Accept json
+// @Produce json
+// @Param subscription_plan body dto.SubscriptionPlanResponse true "Subscription Plan"
+// @Success 201 {object} dto.SubscriptionPlanResponse
+// @Failure 400 {object} dto.BadRequestResponse  "Bad request, validation error"
+// @Failure 401 {object} dto.UnauthorizedResponse  "Unauthorized, authentication required"
+// @Failure 403 {object} dto.ForbiddenResponse  "Forbidden"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /subscription-plans/ [post]
 func (c *SubscriptionPlanController) Create(ctx *gin.Context) {
 	var plan models.SubscriptionPlan
 	if err := ctx.ShouldBindJSON(&plan); err != nil {
@@ -29,7 +48,10 @@ func (c *SubscriptionPlanController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, result)
+
+	var resp dto.SubscriptionPlanResponse
+	err = copier.Copy(&resp, result)
+	ctx.JSON(http.StatusCreated, resp)
 }
 
 func (c *SubscriptionPlanController) Get(ctx *gin.Context) {

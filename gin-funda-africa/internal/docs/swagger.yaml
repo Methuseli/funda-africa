@@ -1,5 +1,119 @@
 basePath: /api/v1
-host: localhost:8081
+definitions:
+  dto.BadRequestResponse:
+    properties:
+      error:
+        example: invalid input
+        type: string
+    type: object
+  dto.ForbiddenResponse:
+    properties:
+      error:
+        example: forbidden
+        type: string
+    type: object
+  dto.InternalServerErrorResponse:
+    properties:
+      error:
+        example: internal server error
+        type: string
+    type: object
+  dto.LoginRequest:
+    properties:
+      client:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.LoginResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserResponse'
+    type: object
+  dto.SubscriptionPlanResponse:
+    properties:
+      created_at:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      description:
+        example: Full access to all courses and premium features
+        type: string
+      features:
+        example: '["Unlimited access to videos", "Offline downloads", "Priority support"]'
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      name:
+        example: Premium Plan
+        type: string
+      price_usd:
+        example: 49.99
+        type: number
+      updated_at:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+    type: object
+  dto.UnauthorizedResponse:
+    properties:
+      error:
+        example: authentication required
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      country_code:
+        example: ZW
+        type: string
+      created_at:
+        example: "2025-01-01T12:00:00Z"
+        type: string
+      date_of_birth:
+        example: "2000-01-15T00:00:00Z"
+        type: string
+      email:
+        example: john.doe@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      gender:
+        example: male
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      middle_name:
+        example: Michael
+        type: string
+      phone_number:
+        example: "+263771234567"
+        type: string
+      profile_picture:
+        example: https://example.com/images/john_doe.png
+        type: string
+      role:
+        example: student
+        type: string
+      updated_at:
+        example: "2025-08-01T12:00:00Z"
+        type: string
+      username:
+        example: john_doe
+        type: string
+    type: object
+host: localhost:8080
 info:
   contact:
     email: support@swagger.io
@@ -10,9 +124,163 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: TODO APIs
+  title: Funda Africa APIs
   version: "1.0"
-paths: {}
+paths:
+  /subscription-plans/:
+    post:
+      consumes:
+      - application/json
+      description: Subscription plan management
+      parameters:
+      - description: Subscription Plan
+        in: body
+        name: subscription_plan
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SubscriptionPlanResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.SubscriptionPlanResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Add Subscription Plan
+      tags:
+      - subscription plan
+  /users:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create account with profile image
+      parameters:
+      - description: Username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: Email
+        in: formData
+        name: email
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: First Name
+        in: formData
+        name: first_name
+        required: true
+        type: string
+      - description: Middle Name
+        in: formData
+        name: middle_name
+        type: string
+      - description: Last Name
+        in: formData
+        name: last_name
+        required: true
+        type: string
+      - description: Role
+        in: formData
+        name: role
+        required: true
+        type: string
+      - description: Date Of Birth
+        in: formData
+        name: date_of_birth
+        required: true
+        type: string
+      - description: gender
+        in: formData
+        name: gender
+        type: string
+      - description: Phone Number
+        in: formData
+        name: phone_number
+        type: string
+      - description: Country Code
+        in: formData
+        name: country_code
+        required: true
+        type: string
+      - description: Profile Picture
+        in: formData
+        name: profile_picture
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Register user
+      tags:
+      - user
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: User Login
+      parameters:
+      - description: User login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Login
+      tags:
+      - user
 schemes:
 - http
+securityDefinitions:
+  CookieAuth:
+    in: cookie
+    name: session_token
+    type: apiKey
 swagger: "2.0"

@@ -1,7 +1,34 @@
-# role, object, action
-student, courses, view
-teacher, courses, create
-teacher, courses, update
-tutor, lessons, teach
-org_rep, organizations, create
-admin, *, *
+p, super_admin, *, *
+p, admin, /api/v1/organizations/, POST
+p, admin, /api/v1/organizations/:id, PATCH
+p, admin, /api/v1/organizations/, DELETE
+p, admin, /api/v1/organizations/, GET
+p, admin, /api/v1/subscription-plans/, POST
+p, admin, /api/v1/subscription-plans/:id, PATCH
+p, admin, /api/v1/subscription-plans/:id, DELETE
+p, admin, /api/v1/subscription-plans/:id, GET
+p, admin, /api/v1/subscription-plans/, GET
+p, admin, /api/v1/users/, GET
+p, admin, /api/v1/users/, GET
+p, admin, /api/v1/users/, PATCH
+p, admin, /api/v1/users/, DELETE
+p, org_rep, /api/v1/organizations/, POST
+p, org_rep, /api/v1/organizations/, update_own
+p, org_rep, /api/v1/organizations/, GET
+p, student, /api/v1/users/, view_own
+p, student, /api/v1/users/, update_own
+p, student, /api/v1/users/, delete_own
+p, teacher, /api/v1/users/, view_own
+p, teacher, /api/v1/users/, update_own
+p, teacher, /api/v1/users/, delete_own
+p, tutor, /api/v1/users/, view_own
+p, tutor, /api/v1/users/, update_own
+p, tutor, /api/v1/users/, delete_own
+p, student, /api/v1/subscription-plans/, GET
+p, teacher, /api/v1/subscription-plans/, GET
+p, tutor, /api/v1/subscription-plans/, GET
+
+g, admin, super_admin
+g, org_rep, student
+g, teacher, student
+g, tutor, student

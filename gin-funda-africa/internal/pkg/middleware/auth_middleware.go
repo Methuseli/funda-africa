@@ -7,10 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-)
 
-// JwtSecretKey should come from your config loader
-var JwtSecretKey []byte
+	Log "github.com/sirupsen/logrus"
+)
 
 type Claims struct {
 	UserID string `json:"user_id"`
@@ -19,7 +18,7 @@ type Claims struct {
 }
 
 // AuthMiddleware validates JWT from cookie (web) or Authorization header (mobile)
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(jwtSecretKey []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var tokenStr string
 
@@ -29,7 +28,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			tokenStr = strings.TrimPrefix(authHeader, "Bearer ")
 		} else {
 			// Check cookie
-			cookie, err := c.Cookie("token")
+			cookie, err := c.Cookie("session_token")
 			if err != nil {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
 				c.Abort()
@@ -40,8 +39,10 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		claims := &Claims{}
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
-			return JwtSecretKey, nil
+			return jwtSecretKey, nil
 		})
+
+		Log.Debugf("Token %v", token)
 
 		if err != nil || !token.Valid || claims.ExpiresAt < time.Now().Unix() {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid or expired token"})

@@ -17,7 +17,7 @@ func RegisterAllUserServiceRoutes(router *gin.Engine, enforcer *casbin.Enforcer,
 	RegisterAuthRoutes(api, services.NewUserService(jwtKey))
 
 	protected := api.Group("/")
-	protected.Use(middleware.AuthMiddleware())
+	protected.Use(middleware.AuthMiddleware(jwtKey))
 	protected.Use(middleware.RequirePermission(enforcer))
 	{
 		RegisterAdminRoutes(protected, services.NewUserService(jwtKey))
