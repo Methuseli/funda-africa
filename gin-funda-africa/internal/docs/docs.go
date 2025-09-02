@@ -25,6 +25,81 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/subscription-plans/": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Subscription plan management",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscription plans"
+                ],
+                "summary": "Retrieve All Subscription Plans",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.SubscriptionPlanResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, validation error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BadRequestResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, authentication required",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -141,6 +216,142 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Permanently remove a subscription plan by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscription plan"
+                ],
+                "summary": "Delete subscription plan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Subscription Plan ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad request, validation error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BadRequestResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, authentication required",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Subscription plan not found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Update an existing subscription plan by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscription plan"
+                ],
+                "summary": "Edit subscription plan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Subscription Plan ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Partial subscription plan update",
+                        "name": "subscription_plan",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/repository.SubscriptionPlanPatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SubscriptionPlanResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, validation error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BadRequestResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, authentication required",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Subscription plan not found",
                         "schema": {
                             "$ref": "#/definitions/dto.NotFoundResponse"
                         }
@@ -484,6 +695,31 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "john_doe"
+                }
+            }
+        },
+        "repository.SubscriptionPlanPatch": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "featuresJSON": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "priceUSD": {
+                    "type": "number",
+                    "format": "float64"
                 }
             }
         }

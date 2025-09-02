@@ -15,6 +15,7 @@ func RegisterAllUserServiceRoutes(router *gin.Engine, enforcer *casbin.Enforcer,
 	api := router.Group("/api/v1")
 
 	RegisterAuthRoutes(api, services.NewUserService(jwtKey))
+	RegisterRetrieveSubscriptionPlanRoutes(api, services.NewSubscriptionPlanService())
 
 	protected := api.Group("/")
 	protected.Use(middleware.AuthMiddleware(jwtKey))

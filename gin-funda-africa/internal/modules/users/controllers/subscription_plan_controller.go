@@ -84,6 +84,25 @@ func (c *SubscriptionPlanController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+
+// @BasePath /api/v1
+
+// Create godoc
+// @Security CookieAuth
+// @Summary Retrieve All Subscription Plans
+// @Description Subscription plan management
+// @Tags subscription plans
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number" default(1)
+// @Param pageSize query int false "Number of items per page" default(10)
+// @Success 200 {array} dto.SubscriptionPlanResponse
+// @Failure 400 {object} dto.BadRequestResponse  "Bad request, validation error"
+// @Failure 401 {object} dto.UnauthorizedResponse  "Unauthorized, authentication required"
+// @Failure 403 {object} dto.ForbiddenResponse  "Forbidden"
+// @Failure 404 {object} dto.NotFoundResponse "Resource not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /subscription-plans/ [get]
 func (c *SubscriptionPlanController) List(ctx *gin.Context) {
 	page := getQueryInt(ctx, "page", 1)
 	pageSize := getQueryInt(ctx, "pageSize", 10)
@@ -95,6 +114,24 @@ func (c *SubscriptionPlanController) List(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, plans)
 }
 
+// @BasePath /api/v1
+
+// UpdateSubscriptionPlan godoc
+// @Summary Edit subscription plan
+// @Description Update an existing subscription plan by ID
+// @Tags subscription plan
+// @Security CookieAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Subscription Plan ID"
+// @Param subscription_plan body repository.SubscriptionPlanPatch true "Partial subscription plan update"
+// @Success 200 {object} dto.SubscriptionPlanResponse
+// @Failure 400 {object} dto.BadRequestResponse "Bad request, validation error"
+// @Failure 401 {object} dto.UnauthorizedResponse "Unauthorized, authentication required"
+// @Failure 403 {object} dto.ForbiddenResponse "Forbidden"
+// @Failure 404 {object} dto.NotFoundResponse "Subscription plan not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /subscription-plans/{id} [patch]
 func (c *SubscriptionPlanController) Update(ctx *gin.Context) {
 	id, _ := uuid.Parse(ctx.Param("id"))
 	var patch repository.SubscriptionPlanPatch
@@ -107,9 +144,28 @@ func (c *SubscriptionPlanController) Update(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, plan)
+
+	var resp dto.SubscriptionPlanResponse
+	err = copier.Copy(&resp, plan)
+	
+	ctx.JSON(http.StatusOK, resp)
 }
 
+// DeleteSubscriptionPlan godoc
+// @Summary Delete subscription plan
+// @Description Permanently remove a subscription plan by ID
+// @Tags subscription plan
+// @Security CookieAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Subscription Plan ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} dto.BadRequestResponse "Bad request, validation error"
+// @Failure 401 {object} dto.UnauthorizedResponse "Unauthorized, authentication required"
+// @Failure 403 {object} dto.ForbiddenResponse "Forbidden"
+// @Failure 404 {object} dto.NotFoundResponse "Subscription plan not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /subscription-plans/{id} [delete]
 func (c *SubscriptionPlanController) Delete(ctx *gin.Context) {
 	id, _ := uuid.Parse(ctx.Param("id"))
 	if err := c.service.DeleteSubscriptionPlan(id); err != nil {
@@ -118,3 +174,4 @@ func (c *SubscriptionPlanController) Delete(ctx *gin.Context) {
 	}
 	ctx.Status(http.StatusNoContent)
 }
+

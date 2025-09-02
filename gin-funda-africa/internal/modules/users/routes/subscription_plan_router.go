@@ -12,9 +12,16 @@ func RegisterSubscriptionPlanRoutes(rg *gin.RouterGroup, service *services.Subsc
 	plans := rg.Group("/subscription-plans")
 	{
 		plans.POST("/", controller.Create)
-		plans.GET("/:id", controller.Get)
-		plans.GET("/", controller.List)
 		plans.PATCH("/:id", controller.Update)
 		plans.DELETE("/:id", controller.Delete)
+	}
+}
+
+func RegisterRetrieveSubscriptionPlanRoutes(rg *gin.RouterGroup, service *services.SubscriptionPlanService) {
+	controller := controllers.NewSubscriptionPlanController(service)
+	plans := rg.Group("/subscription-plans")
+	{
+		plans.GET("/:id", controller.Get)
+		plans.GET("/", controller.List)
 	}
 }

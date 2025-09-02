@@ -2,10 +2,12 @@ package repository
 
 import (
 	"gin-funda-africa/internal/modules/users"
+	"gin-funda-africa/internal/modules/users/dto"
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/pkg/utils"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 // ---------- CREATE ----------
@@ -28,7 +30,7 @@ func GetSubscriptionPlan(planID uuid.UUID) (*models.SubscriptionPlan, error) {
 
 // ---------- PAGINATED LIST ----------
 type PaginatedSubscriptionPlans struct {
-	Data       []*models.SubscriptionPlan
+	Data       []*dto.SubscriptionPlanResponse
 	TotalCount int64
 	Page       int
 	PageSize   int
@@ -54,8 +56,13 @@ func FindAllSubscriptionPlans(page, pageSize int) (*PaginatedSubscriptionPlans, 
 		return nil, err
 	}
 
+	var planResponses []*dto.SubscriptionPlanResponse
+	if err := copier.Copy(&planResponses, &plans); err != nil {
+		return nil, err
+	}
+
 	return &PaginatedSubscriptionPlans{
-		Data:       plans,
+		Data:       planResponses,
 		TotalCount: totalCount,
 		Page:       page,
 		PageSize:   pageSize,

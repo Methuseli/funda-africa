@@ -119,6 +119,23 @@ definitions:
         example: john_doe
         type: string
     type: object
+  repository.SubscriptionPlanPatch:
+    properties:
+      description:
+        type: string
+      featuresJSON:
+        items:
+          format: int32
+          type: integer
+        type: array
+      isActive:
+        type: boolean
+      name:
+        type: string
+      priceUSD:
+        format: float64
+        type: number
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -134,6 +151,55 @@ info:
   version: "1.0"
 paths:
   /subscription-plans/:
+    get:
+      consumes:
+      - application/json
+      description: Subscription plan management
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.SubscriptionPlanResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve All Subscription Plans
+      tags:
+      - subscription plans
     post:
       consumes:
       - application/json
@@ -174,6 +240,46 @@ paths:
       tags:
       - subscription plan
   /subscription-plans/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently remove a subscription plan by ID
+      parameters:
+      - description: Subscription Plan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Subscription plan not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Delete subscription plan
+      tags:
+      - subscription plan
     get:
       consumes:
       - application/json
@@ -214,6 +320,54 @@ paths:
       security:
       - CookieAuth: []
       summary: Retrieve Single Subscription Plan
+      tags:
+      - subscription plan
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing subscription plan by ID
+      parameters:
+      - description: Subscription Plan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Partial subscription plan update
+        in: body
+        name: subscription_plan
+        required: true
+        schema:
+          $ref: '#/definitions/repository.SubscriptionPlanPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SubscriptionPlanResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Subscription plan not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Edit subscription plan
       tags:
       - subscription plan
   /users:
