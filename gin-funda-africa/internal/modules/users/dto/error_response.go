@@ -15,3 +15,7 @@ type UnauthorizedResponse struct {
 type ForbiddenResponse struct {
 	Error string `json:"error" example:"forbidden"`
 }
+
+type NotFoundResponse struct {
+	Error string `json:"error" example:"Plan does not exist"`
+}

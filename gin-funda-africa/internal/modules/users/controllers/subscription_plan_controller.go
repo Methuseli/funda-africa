@@ -54,6 +54,23 @@ func (c *SubscriptionPlanController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
+// @BasePath /api/v1
+
+// Create godoc
+// @Security CookieAuth
+// @Summary Retrieve Single Subscription Plan
+// @Description Subscription plan management
+// @Tags subscription plan
+// @Accept json
+// @Produce json
+// @Param id path string true "Subscription Plan ID"
+// @Success 200 {object} dto.SubscriptionPlanResponse
+// @Failure 400 {object} dto.BadRequestResponse  "Bad request, validation error"
+// @Failure 401 {object} dto.UnauthorizedResponse  "Unauthorized, authentication required"
+// @Failure 403 {object} dto.ForbiddenResponse  "Forbidden"
+// @Failure 404 {object} dto.NotFoundResponse "Resource not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /subscription-plans/{id} [get]
 func (c *SubscriptionPlanController) Get(ctx *gin.Context) {
 	id, _ := uuid.Parse(ctx.Param("id"))
 	plan, err := c.service.GetSubscriptionPlan(id)
@@ -61,7 +78,10 @@ func (c *SubscriptionPlanController) Get(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, plan)
+
+	var resp dto.SubscriptionPlanResponse
+	err = copier.Copy(&resp, plan)
+	ctx.JSON(http.StatusOK, resp)
 }
 
 func (c *SubscriptionPlanController) List(ctx *gin.Context) {
