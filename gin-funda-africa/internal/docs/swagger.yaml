@@ -449,6 +449,56 @@ paths:
       summary: Register user
       tags:
       - user
+  /users/:
+    get:
+      consumes:
+      - application/json
+      description: User management
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve All Users
+      tags:
+      - users
   /users/login:
     post:
       consumes:

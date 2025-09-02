@@ -3,11 +3,13 @@ package repository
 import (
 	"fmt"
 	"gin-funda-africa/internal/modules/users"
+	"gin-funda-africa/internal/modules/users/dto"
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/pkg/utils"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 // ---------- CREATE ----------
@@ -47,7 +49,7 @@ func GetUserForLogin(username, password string) (*models.User, error) {
 
 // ---------- PAGINATED LIST ----------
 type PaginatedUsers struct {
-	Data       []*models.User
+	Data       []*dto.UserResponse
 	TotalCount int64
 	Page       int
 	PageSize   int
@@ -70,8 +72,13 @@ func FindAllUsers(page, pageSize int) (*PaginatedUsers, error) {
 		return nil, err
 	}
 
+	var userResponses []*dto.UserResponse
+	if err := copier.Copy(&userResponses, &usersList); err != nil {
+		return nil, err
+	}
+
 	return &PaginatedUsers{
-		Data:       usersList,
+		Data:       userResponses,
 		TotalCount: totalCount,
 		Page:       page,
 		PageSize:   pageSize,
