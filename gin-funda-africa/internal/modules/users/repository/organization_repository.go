@@ -9,10 +9,10 @@ import (
 )
 
 type PaginatedOrganizations struct {
-    Data       []*models.Organization
-    TotalCount int64
-    Page       int
-    PageSize   int
+    Data       []*models.Organization `json:"data"`
+    TotalCount int64 `json:"total_count"`
+    Page       int `json:"page"`
+    PageSize   int `json:"page_size"`
 }
 
 type OrganizationPatch struct {

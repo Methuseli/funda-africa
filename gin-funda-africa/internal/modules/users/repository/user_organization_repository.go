@@ -31,10 +31,10 @@ func GetUserOrganization(userID, orgID uuid.UUID) (*models.UserOrganization, err
 
 // ---------- PAGINATED LIST ----------
 type PaginatedUserOrganizations struct {
-	Data       []*models.UserOrganization
-	TotalCount int64
-	Page       int
-	PageSize   int
+	Data       []*models.UserOrganization `json:"data"`
+	TotalCount int64                      `json:"total_count"`
+	Page       int                        `json:"page"`
+	PageSize   int                        `json:"page_size"`
 }
 
 func FindAllUserOrganizations(page, pageSize int) (*PaginatedUserOrganizations, error) {

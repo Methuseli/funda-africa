@@ -30,10 +30,10 @@ func GetSubscriptionPlan(planID uuid.UUID) (*models.SubscriptionPlan, error) {
 
 // ---------- PAGINATED LIST ----------
 type PaginatedSubscriptionPlans struct {
-	Data       []*dto.SubscriptionPlanResponse
-	TotalCount int64
-	Page       int
-	PageSize   int
+	Data       []*dto.SubscriptionPlanResponse `json:"data"`
+	TotalCount int64                           `json:"total_count"`
+	Page       int                             `json:"page"`
+	PageSize   int                             `json:"page_size"`
 }
 
 func FindAllSubscriptionPlans(page, pageSize int) (*PaginatedSubscriptionPlans, error) {
@@ -80,7 +80,7 @@ type SubscriptionPlanPatch struct {
 
 func UpdateSubscriptionPlanPartial(planID uuid.UUID, patch *SubscriptionPlanPatch) (*models.SubscriptionPlan, error) {
 	updates := utils.StructToMap(patch)
-	
+
 	if len(updates) == 0 {
 		return nil, nil
 	}

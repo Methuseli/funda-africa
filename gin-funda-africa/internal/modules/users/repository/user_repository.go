@@ -49,10 +49,10 @@ func GetUserForLogin(username, password string) (*models.User, error) {
 
 // ---------- PAGINATED LIST ----------
 type PaginatedUsers struct {
-	Data       []*dto.UserResponse
-	TotalCount int64
-	Page       int
-	PageSize   int
+	Data       []*dto.UserResponse `json:"data"`
+	TotalCount int64               `json:"total_count"`
+	Page       int                 `json:"page"`
+	PageSize   int                 `json:"page_size"`
 }
 
 func FindAllUsers(page, pageSize int) (*PaginatedUsers, error) {
@@ -102,7 +102,7 @@ type UserPatch struct {
 
 func UpdateUser(id uuid.UUID, patch *UserPatch) (*models.User, error) {
 	updates := utils.StructToMap(patch)
-	
+
 	if len(updates) == 0 {
 		return nil, nil
 	}
