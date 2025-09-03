@@ -3,6 +3,7 @@ package services
 import (
 	"gin-funda-africa/internal/modules/education/models"
 	"gin-funda-africa/internal/modules/education/repository"
+	"gin-funda-africa/internal/pkg/utils"
 
 	"github.com/google/uuid"
 )
@@ -17,14 +18,7 @@ func (s *CurriculaService) GetCurriculumById(id uuid.UUID) (*models.Curriculum, 
 	return repository.GetCurriculum(id)
 }
 
-func (s *CurriculaService) GetCurriculaByCountry(country string, page, pageSize int) (*repository.PaginatedCurriculums, error) {
-	return repository.GetCurriculaByCountry(country, page, pageSize)
+func (s *CurriculaService) GetCurricula(params utils.Params, page, pageSize int) (*repository.PaginatedCurriculums, error) {
+	return repository.GetCurricula(params, page, pageSize)
 }
 
-func (s *CurriculaService) GetCurriculaByBoard(board string, page, pageSize int) (*repository.PaginatedCurriculums, error) {
-	return repository.GetCurriculaByBoard(board, page, pageSize)
-}
-
-func (s *CurriculaService) GetCurriculaByVersion(version uuid.UUID, page, pageSize int) (*repository.PaginatedCurriculums, error) {
-	return repository.GetCurriculaByVersion(version, page, pageSize)
-}

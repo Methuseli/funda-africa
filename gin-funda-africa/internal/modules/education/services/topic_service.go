@@ -3,6 +3,7 @@ package services
 import (
 	"gin-funda-africa/internal/modules/education/models"
 	"gin-funda-africa/internal/modules/education/repository"
+	"gin-funda-africa/internal/pkg/utils"
 
 	"github.com/google/uuid"
 )
@@ -17,6 +18,6 @@ func (s *TopicService) GetTopicByID(id uuid.UUID) (*models.Topic, error) {
 	return repository.GetTopicByID(id)
 }
 
-func (s *TopicService) GetTopicsBySubjectID(subject uuid.UUID, page, pageSize int) (*repository.PaginatedTopics, error) {
-	return repository.GetTopicsBySubjectID(subject, page, pageSize)
+func (s *TopicService) GetTopics(params utils.Params, page, pageSize int) (*repository.PaginatedTopics, error) {
+	return repository.GetTopicsBySubjectID(params, page, pageSize)
 }

@@ -38,19 +38,19 @@ type TopicResponse struct {
 }
 
 type SubTopicResponse struct {
-	ID                uuid.UUID                 `json:"id"`
-	TopicID           uuid.UUID                 `json:"topic_id"`
-	Name              string                    `json:"name"`
-	OrderIndex        string                    `json:"order_index"`
-	Code              string                    `json:"code"`
-	CreatedAt         time.Time                 `json:"created_at"`
-	UpdatedAt         time.Time                 `json:"updated_at"`
-	Objective         ObjectivesResponse        `json:"objectives"`
-	Content           ContentResponse           `json:"syllabus_contents"`
-	Prerequisite      PrerequisiteResponse      `json:"prerequisites"`
-	SuggestedResource SuggestedResourceResponse `json:"suggested_resources"`
-	SuggestedNote     SuggestedNoteResponse     `json:"suggested_notes"`
-	Chunk             ChunkResponse             `json:"chunks"`
+	ID                 uuid.UUID                   `json:"id"`
+	TopicID            uuid.UUID                   `json:"topic_id"`
+	Name               string                      `json:"name"`
+	OrderIndex         string                      `json:"order_index"`
+	Code               string                      `json:"code"`
+	CreatedAt          time.Time                   `json:"created_at"`
+	UpdatedAt          time.Time                   `json:"updated_at"`
+	Objectives         []ObjectivesResponse        `json:"objectives"`
+	Contents           []ContentResponse           `json:"syllabus_contents"`
+	Prerequisites      []PrerequisiteResponse      `json:"prerequisites"`
+	SuggestedResources []SuggestedResourceResponse `json:"suggested_resources"`
+	SuggestedNotes     []SuggestedNoteResponse     `json:"suggested_notes"`
+	Chunks             []ChunkResponse             `json:"chunks"`
 }
 
 type ObjectivesResponse struct {
