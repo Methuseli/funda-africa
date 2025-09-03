@@ -6,6 +6,27 @@ definitions:
         example: invalid input
         type: string
     type: object
+  dto.CurriculumResponse:
+    properties:
+      board:
+        type: string
+      country:
+        type: string
+      created_at:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      start_date:
+        type: string
+      updated_at:
+        type: string
+      version:
+        type: string
+    type: object
   dto.ForbiddenResponse:
     properties:
       error:
@@ -136,6 +157,31 @@ definitions:
         format: float64
         type: number
     type: object
+  repository.UserPatch:
+    properties:
+      countryCode:
+        type: string
+      dateOfBirth:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      gender:
+        type: string
+      lastName:
+        type: string
+      middleName:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      profilePicture:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -150,6 +196,49 @@ info:
   title: Funda Africa APIs
   version: "1.0"
 paths:
+  /curricula/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single curriculum object by their unique UUID
+      parameters:
+      - description: Curriculum UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CurriculumResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve Curriculum
+      tags:
+      - curriculum
   /subscription-plans/:
     get:
       consumes:
@@ -499,6 +588,129 @@ paths:
       summary: Retrieve All Users
       tags:
       - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently delete a user by their UUID
+      parameters:
+      - description: User UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Delete User
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get a single user by their unique UUID
+      parameters:
+      - description: User UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve Single User
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: Update selected fields of a user by their UUID
+      parameters:
+      - description: User UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User fields to update
+        in: body
+        name: user_patch
+        required: true
+        schema:
+          $ref: '#/definitions/repository.UserPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad request, invalid UUID or payload
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Partially Update User
+      tags:
+      - user
   /users/login:
     post:
       consumes:
@@ -522,6 +734,10 @@ paths:
           description: Bad request, validation error
           schema:
             $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Invalid Credentials
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
         "500":
           description: Internal server error
           schema:
