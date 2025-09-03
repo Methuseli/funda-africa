@@ -25,17 +25,16 @@ type PaginatedTopics struct {
 	PageSize   int                 `json:"page_size"`
 }
 
-func GetTopicsBySubjectID(subject uuid.UUID, page, pageSize int) (*PaginatedTopics, error) {
+func GetTopicsBySubjectID(params utils.Params, page, pageSize int) (*PaginatedTopics, error) {
 	var subjects []*models.Topic
 	var responses []*dto.TopicResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{
-		Model:          reflect.TypeOf(subjects),
-		Filter:         "subject_id = ?",
-		Dto:            reflect.TypeOf(responses),
-		Page:           page,
-		PageSize:       pageSize,
-		FilterVariable: subject,
+		Model:    reflect.TypeOf(subjects),
+		Dto:      reflect.TypeOf(responses),
+		Page:     page,
+		PageSize: pageSize,
+		Params:   params,
 	})
 
 	return &PaginatedTopics{

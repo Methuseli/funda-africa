@@ -28,17 +28,16 @@ type PaginatedSubTopics struct {
 	PageSize   int                    `json:"page_size"`
 }
 
-func GetSubTopicByTopicID(topic uuid.UUID, page, pageSize int) (*PaginatedSubTopics, error) {
+func GetSubTopics(params utils.Params, page, pageSize int) (*PaginatedSubTopics, error) {
 	var topics []*models.SubTopic
 	var responses []*dto.SubTopicResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{
 		Model:          reflect.TypeOf(topics),
-		Filter:         subTopicIdQuery,
 		Dto:            reflect.TypeOf(responses),
 		Page:           page,
 		PageSize:       pageSize,
-		FilterVariable: topic,
+		Params: params,
 	})
 
 	return &PaginatedSubTopics{

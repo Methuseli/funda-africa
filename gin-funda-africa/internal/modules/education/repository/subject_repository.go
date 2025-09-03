@@ -25,17 +25,16 @@ type PaginatedSubjects struct {
 	PageSize   int                   `json:"page_size"`
 }
 
-func GetSubjectByCurriculumID(curriculum uuid.UUID, page, pageSize int) (*PaginatedSubjects, error) {
+func GetSubjects(params utils.Params, page, pageSize int) (*PaginatedSubjects, error) {
 	var subjects []*models.Subject
 	var responses []*dto.SubjectResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{
 		Model:          reflect.TypeOf(subjects),
-		Filter:         "curriculum_id = ?",
 		Dto:            reflect.TypeOf(responses),
 		Page:           page,
 		PageSize:       pageSize,
-		FilterVariable: curriculum,
+		Params: params,
 	})
 
 	return &PaginatedSubjects{
@@ -46,44 +45,3 @@ func GetSubjectByCurriculumID(curriculum uuid.UUID, page, pageSize int) (*Pagina
 	}, err
 }
 
-func GetSubjectByCode(code string, page, pageSize int) (*PaginatedSubjects, error) {
-	var subjects []*models.Subject
-	var responses []*dto.SubjectResponse
-
-	results, err := utils.GetPaginatedData(&utils.PaginateData{
-		Model:          reflect.TypeOf(subjects),
-		Filter:         "code = ?",
-		Dto:            reflect.TypeOf(responses),
-		Page:           page,
-		PageSize:       pageSize,
-		FilterVariable: code,
-	})
-
-	return &PaginatedSubjects{
-		Data:       utils.ConvertResults[dto.SubjectResponse](results.Data),
-		TotalCount: results.TotalCount,
-		Page:       results.Page,
-		PageSize:   results.PageSize,
-	}, err
-}
-
-func GetSubjectByLevel(level string, page, pageSize int) (*PaginatedSubjects, error) {
-	var subjects []*models.Subject
-	var responses []*dto.SubjectResponse
-
-	results, err := utils.GetPaginatedData(&utils.PaginateData{
-		Model:          reflect.TypeOf(subjects),
-		Filter:         "level = ?",
-		Dto:            reflect.TypeOf(responses),
-		Page:           page,
-		PageSize:       pageSize,
-		FilterVariable: level,
-	})
-
-	return &PaginatedSubjects{
-		Data:       utils.ConvertResults[dto.SubjectResponse](results.Data),
-		TotalCount: results.TotalCount,
-		Page:       results.Page,
-		PageSize:   results.PageSize,
-	}, err
-}

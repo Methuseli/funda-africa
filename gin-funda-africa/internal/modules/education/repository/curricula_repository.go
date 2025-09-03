@@ -25,17 +25,16 @@ type PaginatedCurriculums struct {
 	PageSize   int                      `json:"page_size"`
 }
 
-func GetCurriculaByCountry(country string, page, pageSize int) (*PaginatedCurriculums, error) {
+func GetCurricula(params utils.Params, page, pageSize int) (*PaginatedCurriculums, error) {
 	var curricula []*models.Curriculum
 	var responses []*dto.CurriculumResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{
 		Model:          reflect.TypeOf(curricula),
-		Filter:         "country = ?",
 		Dto:            reflect.TypeOf(responses),
 		Page:           page,
 		PageSize:       pageSize,
-		FilterVariable: country,
+		Params: params,
 	})
 
 	return &PaginatedCurriculums{
@@ -46,44 +45,3 @@ func GetCurriculaByCountry(country string, page, pageSize int) (*PaginatedCurric
 	}, err
 }
 
-func GetCurriculaByBoard(board string, page, pageSize int) (*PaginatedCurriculums, error) {
-	var curricula []*models.Curriculum
-	var responses []*dto.CurriculumResponse
-
-	results, err := utils.GetPaginatedData(&utils.PaginateData{
-		Model:          reflect.TypeOf(curricula),
-		Filter:         "board = ?",
-		Dto:            reflect.TypeOf(responses),
-		Page:           page,
-		PageSize:       pageSize,
-		FilterVariable: board,
-	})
-
-	return &PaginatedCurriculums{
-		Data:       utils.ConvertResults[dto.CurriculumResponse](results.Data),
-		TotalCount: results.TotalCount,
-		Page:       results.Page,
-		PageSize:   results.PageSize,
-	}, err
-}
-
-func GetCurriculaByVersion(version uuid.UUID, page, pageSize int) (*PaginatedCurriculums, error) {
-	var curricula []*models.Curriculum
-	var responses []*dto.CurriculumResponse
-
-	results, err := utils.GetPaginatedData(&utils.PaginateData{
-		Model:          reflect.TypeOf(curricula),
-		Filter:         "version = ?",
-		Dto:            reflect.TypeOf(responses),
-		Page:           page,
-		PageSize:       pageSize,
-		FilterVariable: version,
-	})
-
-	return &PaginatedCurriculums{
-		Data:       utils.ConvertResults[dto.CurriculumResponse](results.Data),
-		TotalCount: results.TotalCount,
-		Page:       results.Page,
-		PageSize:   results.PageSize,
-	}, err
-}
