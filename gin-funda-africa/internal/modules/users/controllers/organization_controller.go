@@ -4,8 +4,8 @@ import (
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/repository"
 	"gin-funda-africa/internal/modules/users/services"
+	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -44,8 +44,8 @@ func (c *OrganizationController) Get(ctx *gin.Context) {
 }
 
 func (c *OrganizationController) List(ctx *gin.Context) {
-	page := getQueryInt(ctx, "page", 1)
-	pageSize := getQueryInt(ctx, "pageSize", 10)
+	page := utils.GetQueryInt(ctx, "page", 1)
+	pageSize := utils.GetQueryInt(ctx, "pageSize", 10)
 	orgs, err := c.service.ListOrganizations(page, pageSize)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -78,15 +78,4 @@ func (c *OrganizationController) Delete(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-// helper
-func getQueryInt(ctx *gin.Context, key string, defaultVal int) int {
-	val, ok := ctx.GetQuery(key)
-	if !ok {
-		return defaultVal
-	}
-	i, err := strconv.Atoi(val)
-	if err != nil {
-		return defaultVal
-	}
-	return i
-}
+

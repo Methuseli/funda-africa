@@ -4,6 +4,7 @@ import (
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/repository"
 	"gin-funda-africa/internal/modules/users/services"
+	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 	"strconv"
 
@@ -45,8 +46,8 @@ func (c *UserSubscriptionController) Get(ctx *gin.Context) {
 }
 
 func (c *UserSubscriptionController) List(ctx *gin.Context) {
-	page := getQueryInt(ctx, "page", 1)
-	pageSize := getQueryInt(ctx, "pageSize", 10)
+	page := utils.GetQueryInt(ctx, "page", 1)
+	pageSize := utils.GetQueryInt(ctx, "pageSize", 10)
 	subs, err := c.service.ListUserSubscriptions(page, pageSize)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

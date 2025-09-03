@@ -47,7 +47,7 @@ func (c *UserController) Get(ctx *gin.Context) {
 
 	user, err := c.service.GetUserByID(userID)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 

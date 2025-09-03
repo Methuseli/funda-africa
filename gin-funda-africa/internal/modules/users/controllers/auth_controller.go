@@ -116,6 +116,7 @@ func (c *AuthController) Create(ctx *gin.Context) {
 // @Param credentials body dto.LoginRequest true "User login credentials"
 // @Success 200 {object} dto.LoginResponse
 // @Failure 400 {object} dto.BadRequestResponse  "Bad request, validation error"
+// @Failure 401 {object} dto.UnauthorizedResponse  "Invalid Credentials"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /users/login [post]
 func (c *AuthController) Login(ctx *gin.Context) {

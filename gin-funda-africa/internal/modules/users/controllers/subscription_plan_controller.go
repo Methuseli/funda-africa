@@ -5,6 +5,7 @@ import (
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/repository"
 	"gin-funda-africa/internal/modules/users/services"
+	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -104,8 +105,8 @@ func (c *SubscriptionPlanController) Get(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /subscription-plans/ [get]
 func (c *SubscriptionPlanController) List(ctx *gin.Context) {
-	page := getQueryInt(ctx, "page", 1)
-	pageSize := getQueryInt(ctx, "pageSize", 10)
+	page := utils.GetQueryInt(ctx, "page", 1)
+	pageSize := utils.GetQueryInt(ctx, "pageSize", 10)
 	plans, err := c.service.ListSubscriptionPlans(page, pageSize)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
