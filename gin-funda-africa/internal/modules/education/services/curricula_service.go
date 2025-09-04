@@ -1,7 +1,7 @@
 package services
 
 import (
-	"gin-funda-africa/internal/modules/education/models"
+	"gin-funda-africa/internal/modules/education/education_models"
 	"gin-funda-africa/internal/modules/education/repository"
 	"gin-funda-africa/internal/pkg/utils"
 
@@ -14,7 +14,7 @@ func NewCurriculaService() *CurriculaService {
 	return &CurriculaService{}
 }
 
-func (s *CurriculaService) GetCurriculumById(id uuid.UUID) (*models.Curriculum, error) {
+func (s *CurriculaService) GetCurriculumById(id uuid.UUID) (*education_models.Curriculum, error) {
 	return repository.GetCurriculum(id)
 }
 

@@ -1,15 +1,17 @@
 package repository
 
 import (
+	"gin-funda-africa/internal/modules/organizations/dto"
+	"gin-funda-africa/internal/modules/organizations/organization_models"
 	"gin-funda-africa/internal/modules/users"
-	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/pkg/utils"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 type PaginatedOrganizations struct {
-    Data       []*models.Organization `json:"data"`
+    Data       []*dto.OrganizationResponse `json:"data"`
     TotalCount int64 `json:"total_count"`
     Page       int `json:"page"`
     PageSize   int `json:"page_size"`
@@ -22,22 +24,22 @@ type OrganizationPatch struct {
     City        *string `json:"city"`
 }
 
-func SaveOrganization(organization *models.Organization) (*models.Organization, error) {
+func SaveOrganization(organization *organization_models.Organization) (*organization_models.Organization, error) {
 	err := users.Database.Create(&organization). Error
 	if err != nil {
-		return &models.Organization{}, err
+		return &organization_models.Organization{}, err
 	}
 
 	return organization, nil
 }
 
 func FindOrganizationsByUserID(userID uuid.UUID, page, pageSize int) (*PaginatedOrganizations, error) {
-    var organizations []*models.Organization
+    var organizations []*organization_models.Organization
     var totalCount int64
 
     // First, get the total count (for frontend pagination)
     countQuery := users.Database.
-        Model(&models.Organization{}).
+        Model(&organization_models.Organization{}).
         Joins("JOIN user_organizations uo ON uo.organization_id = organizations.id").
         Where("uo.user_id = ?", userID)
 
@@ -53,7 +55,7 @@ func FindOrganizationsByUserID(userID uuid.UUID, page, pageSize int) (*Paginated
 
     // Fetch the actual page of data
     query := users.Database.
-        Model(&models.Organization{}).
+        Model(&organization_models.Organization{}).
         Joins("JOIN user_organizations uo ON uo.organization_id = organizations.id").
         Where("uo.user_id = ?", userID).
         Limit(pageSize).
@@ -63,8 +65,13 @@ func FindOrganizationsByUserID(userID uuid.UUID, page, pageSize int) (*Paginated
         return nil, err
     }
 
+    var responses []*dto.OrganizationResponse
+	if err := copier.Copy(&responses, &organizations); err != nil {
+		return nil, err
+	}
+
     return &PaginatedOrganizations{
-        Data:       organizations,
+        Data:       responses,
         TotalCount: totalCount,
         Page:       page,
         PageSize:   pageSize,
@@ -72,12 +79,12 @@ func FindOrganizationsByUserID(userID uuid.UUID, page, pageSize int) (*Paginated
 }
 
 func FindAllOrganizations(page, pageSize int) (*PaginatedOrganizations, error) {
-    var organizations []*models.Organization
+    var organizations []*organization_models.Organization
     var totalCount int64
 
     // Count total organizations
     if err := users.Database.
-        Model(&models.Organization{}).
+        Model(&organization_models.Organization{}).
         Count(&totalCount).Error; err != nil {
         return nil, err
     }
@@ -90,28 +97,33 @@ func FindAllOrganizations(page, pageSize int) (*PaginatedOrganizations, error) {
 
     // Fetch paginated results
     if err := users.Database.
-        Model(&models.Organization{}).
+        Model(&organization_models.Organization{}).
         Limit(pageSize).
         Offset(offset).
         Find(&organizations).Error; err != nil {
         return nil, err
     }
 
+    var responses []*dto.OrganizationResponse
+	if err := copier.Copy(&responses, &organizations); err != nil {
+		return nil, err
+	}
+
     return &PaginatedOrganizations{
-        Data:       organizations,
+        Data:       responses,
         TotalCount: totalCount,
         Page:       page,
         PageSize:   pageSize,
     }, nil
 }
 
-func UpdateOrganization(id uuid.UUID, patch *OrganizationPatch) (*models.Organization, error) {
+func UpdateOrganization(id uuid.UUID, patch *OrganizationPatch) (*organization_models.Organization, error) {
 	updates := utils.StructToMap(patch)
     if len(updates) == 0 {
         return nil, nil // nothing to update
     }
 
-    var org models.Organization
+    var org organization_models.Organization
     if err := users.Database.Model(&org).Where(utils.IdQuery, id).Updates(updates).Error; err != nil {
         return nil, err
     }
@@ -124,7 +136,7 @@ func UpdateOrganization(id uuid.UUID, patch *OrganizationPatch) (*models.Organiz
 }
 
 func DeleteOrganization(id uuid.UUID) error {
-	var org models.Organization
+	var org organization_models.Organization
     if err := users.Database.First(&org, utils.IdQuery, id).Error; err != nil {
         return err // organization not found or DB error
     }
@@ -137,8 +149,8 @@ func DeleteOrganization(id uuid.UUID) error {
 
 }
 
-func GetOrganization(id uuid.UUID) (*models.Organization, error) {
-    var org models.Organization
+func GetOrganization(id uuid.UUID) (*organization_models.Organization, error) {
+    var org organization_models.Organization
     if err := users.Database.First(&org, utils.IdQuery, id).Error; err != nil {
         return nil, err
     }

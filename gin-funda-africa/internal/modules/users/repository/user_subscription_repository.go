@@ -2,11 +2,13 @@ package repository
 
 import (
 	"gin-funda-africa/internal/modules/users"
+	"gin-funda-africa/internal/modules/users/dto"
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/pkg/utils"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 const planQuery = "user_id = ? AND plan_id = ?"
@@ -26,7 +28,7 @@ func SaveUserSubscription(sub *models.UserSubscription) (*models.UserSubscriptio
 }
 
 // ---------- RETRIEVE SINGLE ----------
-func GetUserSubscription(userID uuid.UUID, planID uint) (*models.UserSubscription, error) {
+func GetUserSubscription(userID, planID uuid.UUID) (*models.UserSubscription, error) {
 	var sub models.UserSubscription
 	if err := users.Database.
 		Where(planQuery, userID, planID).
@@ -38,7 +40,7 @@ func GetUserSubscription(userID uuid.UUID, planID uint) (*models.UserSubscriptio
 
 // ---------- PAGINATED LIST ----------
 type PaginatedUserSubscriptions struct {
-	Data       []*models.UserSubscription `json:"data"`
+	Data       []*dto.UserSubscriptionResponse `json:"data"`
 	TotalCount int64                      `json:"total_count"`
 	Page       int                        `json:"page"`
 	PageSize   int                        `json:"page_size"`
@@ -61,8 +63,13 @@ func FindAllUserSubscriptions(page, pageSize int) (*PaginatedUserSubscriptions, 
 		return nil, err
 	}
 
+	var userSubscriptionResponses []*dto.UserSubscriptionResponse
+	if err := copier.Copy(&userSubscriptionResponses, &list); err != nil {
+		return nil, err
+	}
+
 	return &PaginatedUserSubscriptions{
-		Data:       list,
+		Data:       userSubscriptionResponses,
 		TotalCount: totalCount,
 		Page:       page,
 		PageSize:   pageSize,
@@ -72,11 +79,11 @@ func FindAllUserSubscriptions(page, pageSize int) (*PaginatedUserSubscriptions, 
 // ---------- PARTIAL UPDATE ----------
 type UserSubscriptionPatch struct {
 	StartDate *time.Time
-	EndDate   **time.Time
+	EndDate   *time.Time
 	IsActive  *bool
 }
 
-func UpdateUserSubscriptionPartial(userID uuid.UUID, planID uint, patch *UserSubscriptionPatch) (*models.UserSubscription, error) {
+func UpdateUserSubscriptionPartial(userID, planID uuid.UUID, patch *UserSubscriptionPatch) (*models.UserSubscription, error) {
 	updates := utils.StructToMap(patch)
 
 	if len(updates) == 0 {
@@ -99,15 +106,4 @@ func UpdateUserSubscriptionPartial(userID uuid.UUID, planID uint, patch *UserSub
 	}
 
 	return &sub, nil
-}
-
-// ---------- DELETE ----------
-func DeleteUserSubscription(userID uuid.UUID, planID uint) error {
-	var sub models.UserSubscription
-	if err := users.Database.
-		Where(planQuery, userID, planID).
-		First(&sub).Error; err != nil {
-		return err
-	}
-	return users.Database.Delete(&sub).Error
 }

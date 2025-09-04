@@ -23,9 +23,7 @@ func RegisterAllUserServiceRoutes(router *gin.Engine, enforcer *casbin.Enforcer,
 	{
 		RegisterAdminRoutes(protected, services.NewUserService(jwtKey))
 		RegisterUserRoutes(protected, services.NewUserService(jwtKey))
-		RegisterOrganizationRoutes(protected, services.NewOrganizationService())
 		RegisterSubscriptionPlanRoutes(protected, services.NewSubscriptionPlanService())
-		RegisterUserOrganizationRoutes(protected, services.NewUserOrganizationService())
 		RegisterUserSubscriptionRoutes(protected, services.NewUserSubscriptionService())
 	}
 

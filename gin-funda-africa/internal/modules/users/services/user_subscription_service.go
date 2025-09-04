@@ -17,7 +17,7 @@ func (s *UserSubscriptionService) CreateUserSubscription(sub *models.UserSubscri
 	return repository.SaveUserSubscription(sub)
 }
 
-func (s *UserSubscriptionService) GetUserSubscription(userID uuid.UUID, planID uint) (*models.UserSubscription, error) {
+func (s *UserSubscriptionService) GetUserSubscription(userID, planID uuid.UUID) (*models.UserSubscription, error) {
 	return repository.GetUserSubscription(userID, planID)
 }
 
@@ -25,10 +25,6 @@ func (s *UserSubscriptionService) ListUserSubscriptions(page, pageSize int) (*re
 	return repository.FindAllUserSubscriptions(page, pageSize)
 }
 
-func (s *UserSubscriptionService) UpdateUserSubscriptionPartial(userID uuid.UUID, planID uint, patch *repository.UserSubscriptionPatch) (*models.UserSubscription, error) {
+func (s *UserSubscriptionService) UpdateUserSubscriptionPartial(userID, planID uuid.UUID, patch *repository.UserSubscriptionPatch) (*models.UserSubscription, error) {
 	return repository.UpdateUserSubscriptionPartial(userID, planID, patch)
-}
-
-func (s *UserSubscriptionService) DeleteUserSubscription(userID uuid.UUID, planID uint) error {
-	return repository.DeleteUserSubscription(userID, planID)
 }

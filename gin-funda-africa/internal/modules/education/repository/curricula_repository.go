@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gin-funda-africa/internal/modules/education/dto"
-	"gin-funda-africa/internal/modules/education/models"
+	"gin-funda-africa/internal/modules/education/education_models"
 	"gin-funda-africa/internal/modules/users"
 	"gin-funda-africa/internal/pkg/utils"
 	"reflect"
@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetCurriculum(id uuid.UUID) (*models.Curriculum, error) {
-	var curriculum models.Curriculum
+func GetCurriculum(id uuid.UUID) (*education_models.Curriculum, error) {
+	var curriculum education_models.Curriculum
 	if err := users.Database.First(&curriculum, utils.IdQuery, id).Error; err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ type PaginatedCurriculums struct {
 }
 
 func GetCurricula(params utils.Params, page, pageSize int) (*PaginatedCurriculums, error) {
-	var curricula []*models.Curriculum
+	var curricula []*education_models.Curriculum
 	var responses []*dto.CurriculumResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{

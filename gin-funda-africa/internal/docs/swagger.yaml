@@ -6,6 +6,48 @@ definitions:
         example: invalid input
         type: string
     type: object
+  dto.ChunkResponse:
+    properties:
+      chunk_content:
+        items:
+          type: integer
+        type: array
+      created_at:
+        type: string
+      difficulty:
+        type: string
+      id:
+        type: string
+      language:
+        type: string
+      order_index:
+        type: string
+      reading_time:
+        type: string
+      sub_topic_id:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.ContentResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      order_index:
+        type: string
+      sub_topic_id:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
   dto.CurriculumResponse:
     properties:
       board:
@@ -62,6 +104,163 @@ definitions:
         example: Plan does not exist
         type: string
     type: object
+  dto.ObjectivesResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      order_index:
+        type: string
+      sub_topic_id:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.OrganizationResponse:
+    properties:
+      city:
+        example: Bulawayo
+        type: string
+      country_code:
+        example: ZW
+        type: string
+      created_at:
+        example: "2025-01-01T12:00:00Z"
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        example: NGO
+        type: string
+      type:
+        example: NGO
+        type: string
+      updated_at:
+        example: "2025-08-01T12:00:00Z"
+        type: string
+    type: object
+  dto.OrganizationSubscriptionResponse:
+    properties:
+      created_at:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      end_date:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      organization_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      organization_size:
+        example: 50
+        type: integer
+      plan_id:
+        example: 550e8400-e29b-41d4-a716-446655440fg4
+        type: string
+      start_date:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      updated_at:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+    type: object
+  dto.OrganizationUserResponse:
+    properties:
+      created_at:
+        example: "2025-01-01T12:00:00Z"
+        type: string
+      organization_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      position:
+        example: Teacher
+        type: string
+      updated_at:
+        example: "2025-08-01T12:00:00Z"
+        type: string
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    type: object
+  dto.PrerequisiteResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      order_index:
+        type: string
+      sub_topic_id:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.SubTopicResponse:
+    properties:
+      chunks:
+        items:
+          $ref: '#/definitions/dto.ChunkResponse'
+        type: array
+      code:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      objectives:
+        items:
+          $ref: '#/definitions/dto.ObjectivesResponse'
+        type: array
+      order_index:
+        type: string
+      prerequisites:
+        items:
+          $ref: '#/definitions/dto.PrerequisiteResponse'
+        type: array
+      suggested_notes:
+        items:
+          $ref: '#/definitions/dto.SuggestedNoteResponse'
+        type: array
+      suggested_resources:
+        items:
+          $ref: '#/definitions/dto.SuggestedResourceResponse'
+        type: array
+      syllabus_contents:
+        items:
+          $ref: '#/definitions/dto.ContentResponse'
+        type: array
+      topic_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.SubjectResponse:
+    properties:
+      code:
+        type: string
+      created_at:
+        type: string
+      curriculum:
+        type: string
+      id:
+        type: string
+      level:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
   dto.SubscriptionPlanResponse:
     properties:
       created_at:
@@ -87,6 +286,51 @@ definitions:
         type: number
       updated_at:
         example: "2025-09-01T15:04:05Z"
+        type: string
+    type: object
+  dto.SuggestedNoteResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      order_index:
+        type: string
+      sub_topic_id:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.SuggestedResourceResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      order_index:
+        type: string
+      sub_topic_id:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.TopicResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      order_index:
+        type: string
+      subject_id:
+        type: string
+      updated_at:
         type: string
     type: object
   dto.UnauthorizedResponse:
@@ -140,6 +384,57 @@ definitions:
         example: john_doe
         type: string
     type: object
+  dto.UserSubscriptionResponse:
+    properties:
+      created_at:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      end_date:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      plan_id:
+        example: 550e8400-e29b-41d4-a716-446655440fg4
+        type: string
+      start_date:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      updated_at:
+        example: "2025-09-01T15:04:05Z"
+        type: string
+      user_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+    type: object
+  repository.OrganizationPatch:
+    properties:
+      city:
+        type: string
+      country_code:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  repository.OrganizationSubscriptionPatch:
+    properties:
+      endDate:
+        type: string
+      isActive:
+        type: boolean
+      startDate:
+        type: string
+    type: object
+  repository.OrganizationUserPatch:
+    properties:
+      isActive:
+        type: boolean
+      position:
+        type: string
+    type: object
   repository.SubscriptionPlanPatch:
     properties:
       description:
@@ -182,6 +477,15 @@ definitions:
       username:
         type: string
     type: object
+  repository.UserSubscriptionPatch:
+    properties:
+      endDate:
+        type: string
+      isActive:
+        type: boolean
+      startDate:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -196,7 +500,69 @@ info:
   title: Funda Africa APIs
   version: "1.0"
 paths:
-  /curricula/{id}:
+  /education/curricula/:
+    get:
+      consumes:
+      - application/json
+      description: Curricula management
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: Country where the curriculum is from
+        in: query
+        name: country
+        type: string
+      - description: Examining board for the curriculum
+        in: query
+        name: board
+        type: string
+      - description: Syllabus version
+        in: query
+        name: version
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.CurriculumResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all curricula by country
+      tags:
+      - curricula
+  /education/curricula/{id}:
     get:
       consumes:
       - application/json
@@ -227,7 +593,7 @@ paths:
           schema:
             $ref: '#/definitions/dto.ForbiddenResponse'
         "404":
-          description: User not found
+          description: Curriculum not found
           schema:
             $ref: '#/definitions/dto.NotFoundResponse'
         "500":
@@ -239,6 +605,955 @@ paths:
       summary: Retrieve Curriculum
       tags:
       - curriculum
+  /education/sub-topics/:
+    get:
+      consumes:
+      - application/json
+      description: Sub Topic management
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: Topic related to the sub topic
+        in: query
+        name: topic_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.CurriculumResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Sub topics for an individual topic
+      tags:
+      - sub-topics
+  /education/sub-topics/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single Sub Topic object by their unique UUID
+      parameters:
+      - description: Sub Topic UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SubTopicResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve Sub Topic
+      tags:
+      - sub-topic
+  /education/subjects/:
+    get:
+      consumes:
+      - application/json
+      description: Curricula management
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: Country where the subject is from
+        in: query
+        name: curriculum_id
+        type: string
+      - description: Examining board for the subject
+        in: query
+        name: level
+        type: string
+      - description: Query using subject name
+        in: query
+        name: name
+        type: string
+      - description: Syllabus version
+        in: query
+        name: code
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.SubjectResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all subjects by country
+      tags:
+      - subjects
+  /education/subjects/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single subject object by their unique UUID
+      parameters:
+      - description: Subject UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SubjectResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Subject not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve Subject
+      tags:
+      - subject
+  /education/topics/:
+    get:
+      consumes:
+      - application/json
+      description: Curricula management
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: Subject in which the topics belongs to
+        in: query
+        name: subject_id
+        type: string
+      - description: Topic name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.TopicResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all topics by country
+      tags:
+      - topics
+  /education/topics/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single topic object by their unique UUID
+      parameters:
+      - description: Topic UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TopicResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Topic not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve Topic
+      tags:
+      - topic
+  /organization-subscription/:
+    post:
+      consumes:
+      - application/json
+      description: Organization Subscription plan management
+      parameters:
+      - description: Organization Subscription Plan
+        in: body
+        name: subscription_plan
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OrganizationSubscriptionResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.OrganizationSubscriptionResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Add Organization Subscription Plan
+      tags:
+      - organization-subscription
+  /organization-subscriptions/:
+    get:
+      consumes:
+      - application/json
+      description: Organization Subscription
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.OrganizationSubscriptionResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all Organization subscriptions
+      tags:
+      - organization-subscriptions
+  /organization-subscriptions/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update selected fields of a Organization subscription by their
+        UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: Organization_id
+        required: true
+        type: string
+      - description: Subscription plan UUID
+        in: path
+        name: plan_id
+        required: true
+        type: string
+      - description: Organization fields to update
+        in: body
+        name: Organization_subscription_patch
+        required: true
+        schema:
+          $ref: '#/definitions/repository.OrganizationSubscriptionPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationSubscriptionResponse'
+        "400":
+          description: Bad request, invalid UUID or payload
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Partially Update Organization Subscription
+      tags:
+      - 0rganization-subscription
+  /organization-subscriptions/{organization_id}/{plan_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single Organization subscription object by their unique UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: organization_id
+        required: true
+        type: string
+      - description: Subscription plan UUID
+        in: path
+        name: plan_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationSubscriptionResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Organization Subscription not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve Organization Subscription
+      tags:
+      - organization-subscription
+  /organization-users/:
+    get:
+      consumes:
+      - application/json
+      description: Organization Users
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: Organization UUID
+        in: query
+        name: organization_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.OrganizationUserResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve users in an organization
+      tags:
+      - organization-users
+    post:
+      consumes:
+      - application/json
+      description: Organizations User management
+      parameters:
+      - description: Organizations User
+        in: body
+        name: subscription_plan
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OrganizationUserResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.OrganizationUserResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Add Organizations User
+      tags:
+      - organization
+  /organization-users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single organization object by their unique UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: organization not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve organization
+      tags:
+      - organizations
+    patch:
+      consumes:
+      - application/json
+      description: Update selected fields of a user subscription by their UUID
+      parameters:
+      - description: User UUID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: Organization UUID
+        in: path
+        name: org_id
+        required: true
+        type: string
+      - description: User fields to update
+        in: body
+        name: organization_user_patch
+        required: true
+        schema:
+          $ref: '#/definitions/repository.OrganizationUserPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationUserResponse'
+        "400":
+          description: Bad request, invalid UUID or payload
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Partially Update Organization User
+      tags:
+      - organization-user
+  /organizations/:
+    get:
+      consumes:
+      - application/json
+      description: Organizations
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.OrganizationResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all organizations
+      tags:
+      - organizations
+    post:
+      consumes:
+      - application/json
+      description: Organizations management
+      parameters:
+      - description: Organizations
+        in: body
+        name: subscription_plan
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OrganizationResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.OrganizationResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Add Organizations
+      tags:
+      - organization
+  /organizations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently delete an organization by their UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Delete Organization
+      tags:
+      - organization
+    get:
+      consumes:
+      - application/json
+      description: Get a single organization object by their unique UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: organization not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve organization
+      tags:
+      - organizations
+    patch:
+      consumes:
+      - application/json
+      description: Update selected fields of a organization by their UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User fields to update
+        in: body
+        name: organization_patch
+        required: true
+        schema:
+          $ref: '#/definitions/repository.OrganizationPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationResponse'
+        "400":
+          description: Bad request, invalid UUID or payload
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Partially Update Organization
+      tags:
+      - organization
+  /organizations/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Organizations
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: User UUID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.OrganizationResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all organizations by user
+      tags:
+      - organizations
   /subscription-plans/:
     get:
       consumes:
@@ -459,6 +1774,194 @@ paths:
       summary: Edit subscription plan
       tags:
       - subscription plan
+  /user-subscription/:
+    post:
+      consumes:
+      - application/json
+      description: User Subscription plan management
+      parameters:
+      - description: User Subscription Plan
+        in: body
+        name: subscription_plan
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserSubscriptionResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserSubscriptionResponse'
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Add User Subscription Plan
+      tags:
+      - user-subscription
+  /user-subscription/{user_id}/{plan_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single user subscription object by their unique UUID
+      parameters:
+      - description: User UUID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: Subscription plan UUID
+        in: path
+        name: plan_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserSubscriptionResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: User Subscription not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve User Subscription
+      tags:
+      - user-subscription
+  /user-subscriptions/:
+    get:
+      consumes:
+      - application/json
+      description: User Subscription
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserSubscriptionResponse'
+            type: array
+        "400":
+          description: Bad request, validation error
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized, authentication required
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve all user subscriptions
+      tags:
+      - user-subscriptions
+  /user-subscriptions/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update selected fields of a user subscription by their UUID
+      parameters:
+      - description: User UUID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: Subscription plan UUID
+        in: path
+        name: plan_id
+        required: true
+        type: string
+      - description: User fields to update
+        in: body
+        name: user_subscription_patch
+        required: true
+        schema:
+          $ref: '#/definitions/repository.UserSubscriptionPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserSubscriptionResponse'
+        "400":
+          description: Bad request, invalid UUID or payload
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Partially Update User Subscription
+      tags:
+      - user-subscription
   /users:
     post:
       consumes:

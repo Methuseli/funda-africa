@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"gin-funda-africa/internal/modules/education/education_models"
 	"gin-funda-africa/internal/modules/education/education_routes"
+	"gin-funda-africa/internal/modules/organizations/organization_models"
+	organization_routes "gin-funda-africa/internal/modules/organizations/routes"
 	"gin-funda-africa/internal/modules/users"
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/routes"
@@ -69,11 +72,22 @@ func init() {
 
 func databaseMigrate(database *gorm.DB) {
 	err := database.AutoMigrate(
+		&education_models.Curriculum{},
+		&education_models.Subject{},
+		&education_models.Topic{},
+		&education_models.SubTopic{},
+		&education_models.Objective{},
+		&education_models.Content{},
+		&education_models.Prerequisite{},
+		&education_models.SuggestedNote{},
+		&education_models.SuggestedResource{},
+		&education_models.Chunk{},
 		&models.User{},
-		&models.Organization{},
 		&models.SubscriptionPlan{},
-		&models.UserOrganization{},
-		&models.UserSubscription{})
+		&models.UserSubscription{},
+		&organization_models.OrganizationSubscription{},
+		&organization_models.OrganizationUser{},
+		&organization_models.Organization{})
 
 	if err != nil {
 		Log.Fatalf("❌ Failed to run migrations: %v", err)
@@ -181,6 +195,7 @@ func rbacConfig() {
 
 	routes.RegisterAllUserServiceRoutes(server, enforcer, []byte(appConfig.JwtSecretKey))
 	education_routes.RegisterAllEducationServiceRoutes(server, enforcer, []byte(appConfig.JwtSecretKey))
+	organization_routes.RegisterAllOrganizationServiceRoutes(server, enforcer, []byte(appConfig.JwtSecretKey))
 }
 
 // @title Funda Africa APIs

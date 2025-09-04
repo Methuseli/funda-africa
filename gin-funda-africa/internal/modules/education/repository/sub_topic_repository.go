@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gin-funda-africa/internal/modules/education/dto"
-	"gin-funda-africa/internal/modules/education/models"
+	"gin-funda-africa/internal/modules/education/education_models"
 	"gin-funda-africa/internal/modules/users"
 	"gin-funda-africa/internal/pkg/utils"
 	"reflect"
@@ -12,8 +12,8 @@ import (
 
 const subTopicIdQuery = "subject_id = ?"
 
-func GetSubTopicByID(id uuid.UUID) (*models.SubTopic, error) {
-	var subTopic models.SubTopic
+func GetSubTopicByID(id uuid.UUID) (*education_models.SubTopic, error) {
+	var subTopic education_models.SubTopic
 	if err := users.Database.First(&subTopic, utils.IdQuery, id).Error; err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ type PaginatedSubTopics struct {
 }
 
 func GetSubTopics(params utils.Params, page, pageSize int) (*PaginatedSubTopics, error) {
-	var topics []*models.SubTopic
+	var topics []*education_models.SubTopic
 	var responses []*dto.SubTopicResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{
@@ -49,7 +49,7 @@ func GetSubTopics(params utils.Params, page, pageSize int) (*PaginatedSubTopics,
 }
 
 func GetObjectivesBySubTopic(subTopic uuid.UUID) ([]dto.ObjectivesResponse, error) {
-	var objectives []*models.Objective
+	var objectives []*education_models.Objective
 	var responses []*dto.ObjectivesResponse
 
 	results, err := utils.QueryList(&utils.QueryListData{
@@ -62,7 +62,7 @@ func GetObjectivesBySubTopic(subTopic uuid.UUID) ([]dto.ObjectivesResponse, erro
 }
 
 func GetContentBySubTopic(subTopic uuid.UUID) ([]dto.ContentResponse, error) {
-	var contents []*models.Content
+	var contents []*education_models.Content
 	var responses []*dto.ContentResponse
 
 	results, err := utils.QueryList(&utils.QueryListData{
@@ -75,7 +75,7 @@ func GetContentBySubTopic(subTopic uuid.UUID) ([]dto.ContentResponse, error) {
 }
 
 func GetPrerequisitesBySubTopic(subTopic uuid.UUID) ([]dto.PrerequisiteResponse, error) {
-	var prerequisites []*models.Prerequisite
+	var prerequisites []*education_models.Prerequisite
 	var responses []*dto.PrerequisiteResponse
 
 	results, err := utils.QueryList(&utils.QueryListData{
@@ -89,7 +89,7 @@ func GetPrerequisitesBySubTopic(subTopic uuid.UUID) ([]dto.PrerequisiteResponse,
 }
 
 func GetSuggestedResourceBySubTopic(subTopic uuid.UUID) ([]dto.SuggestedResourceResponse, error) {
-	var suggestedResources []*models.SuggestedResource
+	var suggestedResources []*education_models.SuggestedResource
 	var responses []*dto.SuggestedResourceResponse
 
 	results, err := utils.QueryList(&utils.QueryListData{
@@ -103,7 +103,7 @@ func GetSuggestedResourceBySubTopic(subTopic uuid.UUID) ([]dto.SuggestedResource
 }
 
 func GetSuggestedNotesBySubTopic(subTopic uuid.UUID) ([]dto.SuggestedNoteResponse, error) {
-	var suggestedNotes []*models.SuggestedNote
+	var suggestedNotes []*education_models.SuggestedNote
 	var responses []*dto.SuggestedNoteResponse
 
 	results, err := utils.QueryList(&utils.QueryListData{
@@ -117,7 +117,7 @@ func GetSuggestedNotesBySubTopic(subTopic uuid.UUID) ([]dto.SuggestedNoteRespons
 }
 
 func GetChunksBySubTopic(subTopic uuid.UUID) ([]dto.ChunkResponse, error) {
-	var chunks []*models.Chunk
+	var chunks []*education_models.Chunk
 	var responses []*dto.ChunkResponse
 
 	results, err := utils.QueryList(&utils.QueryListData{

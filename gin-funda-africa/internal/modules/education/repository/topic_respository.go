@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gin-funda-africa/internal/modules/education/dto"
-	"gin-funda-africa/internal/modules/education/models"
+	"gin-funda-africa/internal/modules/education/education_models"
 	"gin-funda-africa/internal/modules/users"
 	"gin-funda-africa/internal/pkg/utils"
 	"reflect"
@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetTopicByID(id uuid.UUID) (*models.Topic, error) {
-	var topic models.Topic
+func GetTopicByID(id uuid.UUID) (*education_models.Topic, error) {
+	var topic education_models.Topic
 	if err := users.Database.First(&topic, utils.IdQuery, id).Error; err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ type PaginatedTopics struct {
 }
 
 func GetTopicsBySubjectID(params utils.Params, page, pageSize int) (*PaginatedTopics, error) {
-	var subjects []*models.Topic
+	var subjects []*education_models.Topic
 	var responses []*dto.TopicResponse
 
 	results, err := utils.GetPaginatedData(&utils.PaginateData{

@@ -1,7 +1,7 @@
 package services
 
 import (
-	"gin-funda-africa/internal/modules/education/models"
+	"gin-funda-africa/internal/modules/education/education_models"
 	"gin-funda-africa/internal/modules/education/repository"
 	"gin-funda-africa/internal/pkg/utils"
 
@@ -14,7 +14,7 @@ func NewTopicService() *TopicService {
 	return &TopicService{}
 }
 
-func (s *TopicService) GetTopicByID(id uuid.UUID) (*models.Topic, error) {
+func (s *TopicService) GetTopicByID(id uuid.UUID) (*education_models.Topic, error) {
 	return repository.GetTopicByID(id)
 }
 

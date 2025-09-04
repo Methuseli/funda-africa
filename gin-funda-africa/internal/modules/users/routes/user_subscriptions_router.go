@@ -17,6 +17,5 @@ func RegisterUserSubscriptionRoutes(rg *gin.RouterGroup, service *services.UserS
 		subs.GET(planParam, controller.Get)
 		subs.GET("/", controller.List)
 		subs.PATCH(planParam, controller.Update)
-		subs.DELETE(planParam, controller.Delete)
 	}
 }

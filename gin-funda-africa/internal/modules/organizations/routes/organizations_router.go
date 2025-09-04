@@ -1,8 +1,9 @@
-package routes
+package organization_routes
 
 import (
-	"gin-funda-africa/internal/modules/users/controllers"
-	"gin-funda-africa/internal/modules/users/services"
+	"gin-funda-africa/internal/modules/organizations/controllers"
+	"gin-funda-africa/internal/modules/organizations/services"
+
 	"github.com/gin-gonic/gin"
 )
 

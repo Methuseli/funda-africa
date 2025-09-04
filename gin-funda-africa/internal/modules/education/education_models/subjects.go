@@ -1,4 +1,4 @@
-package models
+package education_models
 
 import (
 	"time"
@@ -24,7 +24,7 @@ type Curriculum struct {
 	EndDate   *time.Time `gorm:"not null"`
 	CreatedAt time.Time  `gorm:"autoCreateTime"`
 	UpdatedAt time.Time  `gorm:"autoUpdateTime"`
-	Version   Version    `gorm:"foreignKey:VersionId"`
+	Version   Version    `gorm:"foreignKey:VersionID"`
 }
 
 type Subject struct {

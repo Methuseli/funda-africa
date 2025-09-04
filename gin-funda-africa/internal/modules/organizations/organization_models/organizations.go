@@ -1,4 +1,4 @@
-package models
+package organization_models
 
 import (
 	"time"
