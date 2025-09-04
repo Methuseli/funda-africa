@@ -17,11 +17,11 @@ type CurriculaController struct {
 	service *services.CurriculaService
 }
 
-func NewCurricularController(service *services.CurriculaService) *CurriculaController {
+func NewCurriculaController(service *services.CurriculaService) *CurriculaController {
 	return &CurriculaController{service: service}
 }
 
-// @BasePath /education/api/v1/
+// @BasePath /api/v1/
 
 // @Security CookieAuth
 // @Summary Retrieve Curriculum
@@ -36,7 +36,7 @@ func NewCurricularController(service *services.CurriculaService) *CurriculaContr
 // @Failure 403 {object} dto.ForbiddenResponse "Forbidden"
 // @Failure 404 {object} dto.NotFoundResponse "Curriculum not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
-// @Router /curricula/{id} [get]
+// @Router /education/curricula/{id} [get]
 func (c *CurriculaController) Get(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := uuid.Parse(idParam)
@@ -61,7 +61,7 @@ func (c *CurriculaController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// @BasePath education/api/v1
+// @BasePath /api/v1
 
 // Create godoc
 // @Security CookieAuth
@@ -81,8 +81,8 @@ func (c *CurriculaController) Get(ctx *gin.Context) {
 // @Failure 403 {object} dto.ForbiddenResponse  "Forbidden"
 // @Failure 404 {object} dto.NotFoundResponse "Resource not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
-// @Router /curricula/ [get]
-func (c *CurriculaController) GetCurriculumByCountry(ctx *gin.Context) {
+// @Router /education/curricula/ [get]
+func (c *CurriculaController) GetCurricula(ctx *gin.Context) {
 	var params utils.Params
 	err := ctx.ShouldBindQuery(&params)
 	page := utils.GetQueryInt(ctx, "page", 1)

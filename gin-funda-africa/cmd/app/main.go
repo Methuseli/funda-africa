@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gin-funda-africa/internal/modules/education/education_routes"
 	"gin-funda-africa/internal/modules/users"
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/routes"
@@ -179,6 +180,7 @@ func rbacConfig() {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 
 	routes.RegisterAllUserServiceRoutes(server, enforcer, []byte(appConfig.JwtSecretKey))
+	education_routes.RegisterAllEducationServiceRoutes(server, enforcer, []byte(appConfig.JwtSecretKey))
 }
 
 // @title Funda Africa APIs

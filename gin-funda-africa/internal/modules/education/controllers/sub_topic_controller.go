@@ -17,7 +17,7 @@ func NewSubTopicController(service *services.SubTopicService) *SubTopicControlle
 	return &SubTopicController{service: service}
 }
 
-// @BasePath /education/api/v1/
+// @BasePath /api/v1/
 
 // @Security CookieAuth
 // @Summary Retrieve Sub Topic
@@ -32,7 +32,7 @@ func NewSubTopicController(service *services.SubTopicService) *SubTopicControlle
 // @Failure 403 {object} dto.ForbiddenResponse "Forbidden"
 // @Failure 404 {object} dto.NotFoundResponse "User not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
-// @Router /sub-topics/{id} [get]
+// @Router /education/sub-topics/{id} [get]
 func (c *SubTopicController) GetSubTopic(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := uuid.Parse(idParam)
@@ -50,7 +50,7 @@ func (c *SubTopicController) GetSubTopic(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, subTopic)
 }
 
-// @BasePath education/api/v1
+// @BasePath /api/v1
 
 // Create godoc
 // @Security CookieAuth
@@ -68,14 +68,14 @@ func (c *SubTopicController) GetSubTopic(ctx *gin.Context) {
 // @Failure 403 {object} dto.ForbiddenResponse  "Forbidden"
 // @Failure 404 {object} dto.NotFoundResponse "Resource not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
-// @Router /sub-topics/ [get]
-func (c *CurriculaController) GetSubTopics(ctx *gin.Context) {
+// @Router /education/sub-topics/ [get]
+func (c *SubTopicController) GetSubTopics(ctx *gin.Context) {
 	var params utils.Params
 	err := ctx.ShouldBindQuery(&params)
 	page := utils.GetQueryInt(ctx, "page", 1)
 	pageSize := utils.GetQueryInt(ctx, "pageSize", 10)
 
-	curricula, err := c.service.GetCurricula(params, page, pageSize)
+	curricula, err := c.service.GetSubTopics(params, page, pageSize)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

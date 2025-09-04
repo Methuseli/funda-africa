@@ -10,17 +10,17 @@ import (
 )
 
 type PaginateData struct {
-	Model      interface{}
-	Dto        interface{}
-	Page       int
-	PageSize   int
-	Params interface{}
+	Model    interface{}
+	Dto      interface{}
+	Page     int
+	PageSize int
+	Params   interface{}
 }
 
 type QueryListData struct {
-	Model      interface{}
-	Filter     string
-	Dto        interface{}
+	Model          interface{}
+	Filter         string
+	Dto            interface{}
 	FilterVariable interface{}
 }
 
@@ -32,14 +32,15 @@ type Results struct {
 }
 
 type Params struct {
-	Version *string `form:"version"`
-	Country *string `form:"country"`
-	Board   *string `form:"board"`
-	TopicID *string `form:"topic_id"`
+	Version      *string `form:"version"`
+	Country      *string `form:"country"`
+	Board        *string `form:"board"`
+	TopicID      *string `form:"topic_id"`
 	CurriculumID *string `form:"curriculum_id"`
-	Code *string `form:"code"`
-	Level *string `form:"level"`
-	SubjectID *string `form:"subject_id"`
+	Code         *string `form:"code"`
+	Level        *string `form:"level"`
+	SubjectID    *string `form:"subject_id"`
+	Name         *string `form:"name"`
 }
 
 func GetPaginatedData(paginateData *PaginateData) (*Results, error) {
@@ -63,7 +64,7 @@ func GetPaginatedData(paginateData *PaginateData) (*Results, error) {
 			default:
 				query = query.Where(fmt.Sprintf("%s = ?", fieldName), field.Elem().Interface())
 			}
-			
+
 		}
 	}
 
@@ -90,10 +91,10 @@ func GetPaginatedData(paginateData *PaginateData) (*Results, error) {
 	}
 
 	return &Results{
-		Data: responses,
+		Data:       responses,
 		TotalCount: totalCount,
-		Page: page,
-		PageSize: paginateData.PageSize,
+		Page:       page,
+		PageSize:   paginateData.PageSize,
 	}, nil
 }
 
