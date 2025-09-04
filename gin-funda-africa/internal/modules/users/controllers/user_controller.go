@@ -113,7 +113,7 @@ func (c *UserController) Update(ctx *gin.Context) {
 // @Security CookieAuth
 // @Summary Delete User
 // @Description Permanently delete a user by their UUID
-// @Tags users
+// @Tags user
 // @Accept json
 // @Produce json
 // @Param id path string true "User UUID"

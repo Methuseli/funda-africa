@@ -1052,7 +1052,7 @@ paths:
       - CookieAuth: []
       summary: Partially Update Organization Subscription
       tags:
-      - 0rganization-subscription
+      - organization-subscription
   /organization-subscriptions/{organization_id}/{plan_id}:
     get:
       consumes:
@@ -1101,6 +1101,49 @@ paths:
       summary: Retrieve Organization Subscription
       tags:
       - organization-subscription
+  /organization-user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single organization object by their unique UUID
+      parameters:
+      - description: Organization UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrganizationResponse'
+        "400":
+          description: Bad request, invalid UUID
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ForbiddenResponse'
+        "404":
+          description: organization not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Retrieve organization user
+      tags:
+      - organization-user
   /organization-users/:
     get:
       consumes:
@@ -1194,50 +1237,8 @@ paths:
       - CookieAuth: []
       summary: Add Organizations User
       tags:
-      - organization
+      - organization-user
   /organization-users/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get a single organization object by their unique UUID
-      parameters:
-      - description: Organization UUID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.OrganizationResponse'
-        "400":
-          description: Bad request, invalid UUID
-          schema:
-            $ref: '#/definitions/dto.BadRequestResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/dto.UnauthorizedResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/dto.ForbiddenResponse'
-        "404":
-          description: organization not found
-          schema:
-            $ref: '#/definitions/dto.NotFoundResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/dto.InternalServerErrorResponse'
-      security:
-      - CookieAuth: []
-      summary: Retrieve organization
-      tags:
-      - organizations
     patch:
       consumes:
       - application/json
@@ -1503,7 +1504,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Organizations
+      description: List Organizations by user
       parameters:
       - default: 1
         description: Page number
@@ -2127,7 +2128,7 @@ paths:
       - CookieAuth: []
       summary: Delete User
       tags:
-      - users
+      - user
     get:
       consumes:
       - application/json

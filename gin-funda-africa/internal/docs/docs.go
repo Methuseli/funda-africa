@@ -815,7 +815,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "0rganization-subscription"
+                    "organization-subscription"
                 ],
                 "summary": "Partially Update Organization Subscription",
                 "parameters": [
@@ -951,6 +951,73 @@ const docTemplate = `{
                 }
             }
         },
+        "/organization-user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get a single organization object by their unique UUID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organization-user"
+                ],
+                "summary": "Retrieve organization user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OrganizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid UUID",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BadRequestResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "organization not found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/organization-users/": {
             "get": {
                 "security": [
@@ -1048,7 +1115,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "organization"
+                    "organization-user"
                 ],
                 "summary": "Add Organizations User",
                 "parameters": [
@@ -1097,71 +1164,6 @@ const docTemplate = `{
             }
         },
         "/organization-users/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Get a single organization object by their unique UUID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "organizations"
-                ],
-                "summary": "Retrieve organization",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Organization UUID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OrganizationResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request, invalid UUID",
-                        "schema": {
-                            "$ref": "#/definitions/dto.BadRequestResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/dto.UnauthorizedResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/dto.ForbiddenResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "organization not found",
-                        "schema": {
-                            "$ref": "#/definitions/dto.NotFoundResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/dto.InternalServerErrorResponse"
-                        }
-                    }
-                }
-            },
             "patch": {
                 "security": [
                     {
@@ -1574,7 +1576,7 @@ const docTemplate = `{
                         "CookieAuth": []
                     }
                 ],
-                "description": "Organizations",
+                "description": "List Organizations by user",
                 "consumes": [
                     "application/json"
                 ],
@@ -2608,7 +2610,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Delete User",
                 "parameters": [

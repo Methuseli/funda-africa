@@ -125,7 +125,7 @@ func (c *OrganizationController) List(ctx *gin.Context) {
 // Create godoc
 // @Security CookieAuth
 // @Summary Retrieve all organizations by user
-// @Description Organizations
+// @Description List Organizations by user
 // @Tags organizations
 // @Accept json
 // @Produce json

@@ -27,7 +27,7 @@ func NewOrganizationUserController(s *services.OrganizationUserService) *Organiz
 // @Security CookieAuth
 // @Summary Add Organizations User
 // @Description Organizations User management
-// @Tags organization
+// @Tags organization-user
 // @Accept json
 // @Produce json
 // @Param subscription_plan body dto.OrganizationUserResponse true "Organizations User"
@@ -61,9 +61,9 @@ func (c *OrganizationUserController) Create(ctx *gin.Context) {
 // @BasePath /api/v1/
 
 // @Security CookieAuth
-// @Summary Retrieve organization
+// @Summary Retrieve organization user
 // @Description Get a single organization object by their unique UUID
-// @Tags organizations
+// @Tags organization-user
 // @Accept json
 // @Produce json
 // @Param id path string true "Organization UUID"
@@ -73,7 +73,7 @@ func (c *OrganizationUserController) Create(ctx *gin.Context) {
 // @Failure 403 {object} dto.ForbiddenResponse "Forbidden"
 // @Failure 404 {object} dto.NotFoundResponse "organization not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
-// @Router /organization-users/{id} [get]
+// @Router /organization-user/{id} [get]
 func (c *OrganizationUserController) Get(ctx *gin.Context) {
 	userID, _ := uuid.Parse(ctx.Param("user_"))
 	orgID, _ := uuid.Parse(ctx.Param("orgID"))
