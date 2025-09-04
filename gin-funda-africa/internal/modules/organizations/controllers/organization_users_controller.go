@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"errors"
 	"gin-funda-africa/internal/modules/organizations/dto"
 	"gin-funda-africa/internal/modules/organizations/organization_models"
 	"gin-funda-africa/internal/modules/organizations/repository"
 	"gin-funda-africa/internal/modules/organizations/services"
+	"gin-funda-africa/internal/pkg/middleware"
 	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 
@@ -19,6 +21,27 @@ type OrganizationUserController struct {
 
 func NewOrganizationUserController(s *services.OrganizationUserService) *OrganizationUserController {
 	return &OrganizationUserController{service: s}
+}
+
+func checkOrganizationUser(userID, orgID uuid.UUID, ctx *gin.Context, service services.OrganizationService) error {
+	org, err := service.GetOrganization(orgID)
+	if err != nil {
+		return errors.New("Organization does not exist")
+	}
+
+	currentUserID, _ := middleware.GetCurrentUserID(ctx)
+	userRole, _ := middleware.GetCurrentUserRole(ctx)
+
+	if currentUserID != &org.UserID {
+		if *currentUserID != userID {
+			if userRole != nil && !(*userRole == "super_admin" || *userRole == "admin") {
+				return errors.New(forbidden)
+			}
+		}
+
+	}
+
+	return nil
 }
 
 // @BasePath /api/v1
@@ -62,11 +85,12 @@ func (c *OrganizationUserController) Create(ctx *gin.Context) {
 
 // @Security CookieAuth
 // @Summary Retrieve organization user
-// @Description Get a single organization object by their unique UUID
+// @Description Get a single organization user object by their unique UUID
 // @Tags organization-user
 // @Accept json
 // @Produce json
-// @Param id path string true "Organization UUID"
+// @Param org_id path string true "Organization UUID"
+// @Param user_id path string true "User UUID"
 // @Success 200 {object} dto.OrganizationResponse
 // @Failure 400 {object} dto.BadRequestResponse "Bad request, invalid UUID"
 // @Failure 401 {object} dto.UnauthorizedResponse "Unauthorized"
@@ -75,13 +99,25 @@ func (c *OrganizationUserController) Create(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /organization-user/{id} [get]
 func (c *OrganizationUserController) Get(ctx *gin.Context) {
-	userID, _ := uuid.Parse(ctx.Param("user_"))
-	orgID, _ := uuid.Parse(ctx.Param("orgID"))
+	userID, err:= uuid.Parse(ctx.Param("user_id"))
+	orgID, err := uuid.Parse(ctx.Param("org_id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = checkOrganizationUser(userID, orgID, ctx, *services.NewOrganizationService())
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
+	}
+
 	uo, err := c.service.GetOrganizationUser(userID, orgID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
+
 	var resp dto.OrganizationUserResponse
 	err = copier.Copy(&resp, uo)
 	if err != nil {
@@ -114,6 +150,17 @@ func (c *OrganizationUserController) List(ctx *gin.Context) {
 	page := utils.GetQueryInt(ctx, "page", 1)
 	pageSize := utils.GetQueryInt(ctx, "pageSize", 10)
 	id, err := uuid.Parse(ctx.Param("organization_id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = checkOwnership(id, ctx, *services.NewOrganizationService())
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
+	}
+	
 	uos, err := c.service.ListUserByOrganization(id, page, pageSize)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -125,7 +172,7 @@ func (c *OrganizationUserController) List(ctx *gin.Context) {
 // @BasePath /api/v1
 
 // @Security CookieAuth
-// @Summary Partially Update Organization User 
+// @Summary Partially Update Organization User
 // @Description Update selected fields of a user subscription by their UUID
 // @Tags organization-user
 // @Accept json
@@ -140,13 +187,25 @@ func (c *OrganizationUserController) List(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /organization-users/{id} [patch]
 func (c *OrganizationUserController) Update(ctx *gin.Context) {
-	userID, _ := uuid.Parse(ctx.Param("user_id"))
-	orgID, _ := uuid.Parse(ctx.Param("org_id"))
+	userID, err := uuid.Parse(ctx.Param("user_id"))
+	orgID, err := uuid.Parse(ctx.Param("org_id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = checkOrganizationUser(userID, orgID, ctx, *services.NewOrganizationService())
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
+	}
+
 	var patch repository.OrganizationUserPatch
 	if err := ctx.ShouldBindJSON(&patch); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	result, err := c.service.UpdateOrganizationUserPartial(userID, orgID, &patch)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -154,4 +213,3 @@ func (c *OrganizationUserController) Update(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, result)
 }
-

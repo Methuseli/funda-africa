@@ -4,6 +4,7 @@ import (
 	"gin-funda-africa/internal/modules/users/dto"
 	"gin-funda-africa/internal/modules/users/repository"
 	"gin-funda-africa/internal/modules/users/services"
+	"gin-funda-africa/internal/pkg/middleware"
 	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 
@@ -20,6 +21,8 @@ type UserController struct {
 func NewUserController(service *services.UserService) *UserController {
 	return &UserController{service: service}
 }
+
+
 
 // @BasePath /api/v1
 
@@ -40,8 +43,15 @@ func NewUserController(service *services.UserService) *UserController {
 func (c *UserController) Get(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	userID, err := uuid.Parse(idParam)
+
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = middleware.CheckOwnership(userID, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -83,6 +93,12 @@ func (c *UserController) Update(ctx *gin.Context) {
 	userID, err := uuid.Parse(idParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = middleware.CheckOwnership(userID, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -128,6 +144,12 @@ func (c *UserController) Delete(ctx *gin.Context) {
 	userID, err := uuid.Parse(idParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = middleware.CheckOwnership(userID, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 

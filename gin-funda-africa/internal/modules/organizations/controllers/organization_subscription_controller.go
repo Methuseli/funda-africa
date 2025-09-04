@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"errors"
 	"gin-funda-africa/internal/modules/organizations/dto"
 	"gin-funda-africa/internal/modules/organizations/organization_models"
 	"gin-funda-africa/internal/modules/organizations/repository"
 	"gin-funda-africa/internal/modules/organizations/services"
+	"gin-funda-africa/internal/pkg/middleware"
 	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 
@@ -20,6 +22,26 @@ type OrganizationSubscriptionController struct {
 func NewOrganizationSubscriptionController(s *services.OrganizationSubscriptionService) *OrganizationSubscriptionController {
 	return &OrganizationSubscriptionController{service: s}
 }
+
+func checkOwnership(param uuid.UUID, ctx *gin.Context, service services.OrganizationService) (error) {
+	org, err := service.GetOrganization(param)
+	if err != nil {
+		return errors.New("Organization does not exist")
+	}
+
+	userID, _ := middleware.GetCurrentUserID(ctx)
+	userRole, _ := middleware.GetCurrentUserRole(ctx)
+
+	if userID != &org.UserID {
+		if userRole != nil && !(*userRole == "super_admin" || *userRole == "admin") {
+			return errors.New(forbidden)
+		}
+	}
+
+	return nil
+}
+
+
 
 // @BasePath /api/v1
 
@@ -81,6 +103,12 @@ func (c *OrganizationSubscriptionController) Get(ctx *gin.Context) {
 	planID, err := uuid.Parse(ctx.Param("plan_id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = checkOwnership(organizationID, ctx, *services.NewOrganizationService())
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -148,10 +176,16 @@ func (c *OrganizationSubscriptionController) List(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /organization-subscriptions/{id} [patch]
 func (c *OrganizationSubscriptionController) Update(ctx *gin.Context) {
-	OrganizationID, err := uuid.Parse(ctx.Param("Organization_id"))
+	organizationID, err := uuid.Parse(ctx.Param("Organization_id"))
 	planID, err := uuid.Parse(ctx.Param("plan_id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = checkOwnership(organizationID, ctx, *services.NewOrganizationService())
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -160,7 +194,7 @@ func (c *OrganizationSubscriptionController) Update(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	sub, err := c.service.UpdateOrganizationSubscriptionPartial(OrganizationID, planID, &patch)
+	sub, err := c.service.UpdateOrganizationSubscriptionPartial(organizationID, planID, &patch)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

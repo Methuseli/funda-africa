@@ -15,6 +15,7 @@ func RegisterOrganizationRoutes(rg *gin.RouterGroup, service *services.Organizat
 		orgs.POST("/", controller.Create)
 		orgs.GET("/:id", controller.Get)
 		orgs.GET("/", controller.List)
+		orgs.GET("/user/:userID", controller.ListByUser)
 		orgs.PATCH("/:id", controller.Update)
 		orgs.DELETE("/:id", controller.Delete)
 	}

@@ -5,6 +5,7 @@ import (
 	"gin-funda-africa/internal/modules/users/models"
 	"gin-funda-africa/internal/modules/users/repository"
 	"gin-funda-africa/internal/modules/users/services"
+	"gin-funda-africa/internal/pkg/middleware"
 	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 
@@ -84,6 +85,12 @@ func (c *UserSubscriptionController) Get(ctx *gin.Context) {
 		return
 	}
 
+	err = middleware.CheckOwnership(userID, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
+	}
+
 	sub, err := c.service.GetUserSubscription(userID, planID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -152,6 +159,12 @@ func (c *UserSubscriptionController) Update(ctx *gin.Context) {
 	planID, err := uuid.Parse(ctx.Param("plan_id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = middleware.CheckOwnership(userID, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 

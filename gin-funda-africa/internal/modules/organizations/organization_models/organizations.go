@@ -14,6 +14,7 @@ type Organization struct {
 	Type        string    `gorm:"not null"`
 	CountryCode string    `gorm:"size:2;not null"`
 	City        string
+	UserID      uuid.UUID `gorm:"type:uuid"`
 	CreatedAt   time.Time `gorm:"autoCreateTime"`
 	UpdatedAt   time.Time `gorm:"autoUpdateTime"`
 }

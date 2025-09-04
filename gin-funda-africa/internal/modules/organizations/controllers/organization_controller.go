@@ -5,6 +5,7 @@ import (
 	"gin-funda-africa/internal/modules/organizations/organization_models"
 	"gin-funda-africa/internal/modules/organizations/repository"
 	"gin-funda-africa/internal/modules/organizations/services"
+	"gin-funda-africa/internal/pkg/middleware"
 	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 
@@ -12,6 +13,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 )
+
+const forbidden = "Forbidden, cannot access this resource"
 
 type OrganizationController struct {
 	service *services.OrganizationService
@@ -75,11 +78,26 @@ func (c *OrganizationController) Create(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /organizations/{id} [get]
 func (c *OrganizationController) Get(ctx *gin.Context) {
-	id, _ := uuid.Parse(ctx.Param("id"))
+	id, err := uuid.Parse(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
 	org, err := c.service.GetOrganization(id)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
+	}
+
+	userID, _ := middleware.GetCurrentUserID(ctx)
+	userRole, _ := middleware.GetCurrentUserRole(ctx)
+
+	if userID != &org.UserID {
+		if userRole != nil && !(*userRole == "super_admin" || *userRole == "admin") {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": forbidden})
+			return
+		}
 	}
 
 	var resp dto.OrganizationResponse
@@ -138,13 +156,19 @@ func (c *OrganizationController) List(ctx *gin.Context) {
 // @Failure 403 {object} dto.ForbiddenResponse  "Forbidden"
 // @Failure 404 {object} dto.NotFoundResponse "Resource not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
-// @Router /organizations/{user_id} [get]
+// @Router /organizations/user/{user_id} [get]
 func (c *OrganizationController) ListByUser(ctx *gin.Context) {
 	page := utils.GetQueryInt(ctx, "page", 1)
 	pageSize := utils.GetQueryInt(ctx, "pageSize", 10)
 	userID, err := uuid.Parse(ctx.Param("user_id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	err = middleware.CheckOwnership(userID, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -173,17 +197,39 @@ func (c *OrganizationController) ListByUser(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /organizations/{id} [patch]
 func (c *OrganizationController) Update(ctx *gin.Context) {
-	id, _ := uuid.Parse(ctx.Param("id"))
+	id, err := uuid.Parse(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	org, err := c.service.GetOrganization(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	userID, _ := middleware.GetCurrentUserID(ctx)
+	userRole, _ := middleware.GetCurrentUserRole(ctx)
+
+	if userID != &org.UserID {
+		if userRole != nil && !(*userRole == "super_admin" || *userRole == "admin") {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": forbidden})
+			return
+		}
+	}
+
 	var patch repository.OrganizationPatch
 	if err := ctx.ShouldBindJSON(&patch); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	org, err := c.service.UpdateOrganization(id, &patch)
+	org, err = c.service.UpdateOrganization(id, &patch)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 
 	var resp dto.OrganizationResponse
 	err = copier.Copy(&resp, org)
@@ -210,12 +256,31 @@ func (c *OrganizationController) Update(ctx *gin.Context) {
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /organizations/{id} [delete]
 func (c *OrganizationController) Delete(ctx *gin.Context) {
-	id, _ := uuid.Parse(ctx.Param("id"))
+	id, err := uuid.Parse(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": utils.InvalidUUID})
+		return
+	}
+
+	org, err := c.service.GetOrganization(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	userID, _ := middleware.GetCurrentUserID(ctx)
+	userRole, _ := middleware.GetCurrentUserRole(ctx)
+
+	if userID != &org.UserID {
+		if userRole != nil && !(*userRole == "super_admin" || *userRole == "admin") {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": forbidden})
+			return
+		}
+	}
+
 	if err := c.service.DeleteOrganization(id); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.Status(http.StatusNoContent)
 }
-
-

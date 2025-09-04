@@ -1,12 +1,15 @@
 package middleware
 
 import (
+	"errors"
+	"gin-funda-africa/internal/pkg/utils"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 
 	Log "github.com/sirupsen/logrus"
 )
@@ -55,4 +58,65 @@ func AuthMiddleware(jwtSecretKey []byte) gin.HandlerFunc {
 		c.Set("role", claims.Role)
 		c.Next()
 	}
+}
+
+func CheckOwnership (param uuid.UUID, ctx *gin.Context) (error) {
+	requestUser, exists := ctx.Get("userID")
+	if !exists {
+		return errors.New("Requesting user not defined")
+	}
+
+	userRole, exists := ctx.Get("role")
+
+	strValue, ok := requestUser.(string)
+	if !ok {
+		return errors.New("Invalid user id")
+	}
+
+	requestUserID, err := uuid.Parse(strValue)
+	if err != nil {
+		return errors.New(utils.InvalidUUID)
+	}
+
+	if exists && (userRole == "super_admin" || userRole == "admin"){
+		return nil
+	}
+
+	if requestUserID != param { 
+		return errors.New("Forbidden")
+	}
+
+	return nil
+}
+
+func GetCurrentUserID(ctx *gin.Context) (*uuid.UUID, error) {
+	requestUser, exists := ctx.Get("userID")
+	if !exists {
+		return nil, errors.New("Requesting user not defined")
+	}
+
+	strValue, ok := requestUser.(string)
+	if !ok {
+		return nil, errors.New("Invalid user id")
+	}
+
+	requestUserID, err := uuid.Parse(strValue)
+	if err != nil {
+		return nil, errors.New(utils.InvalidUUID)
+	}
+
+	return &requestUserID, nil
+}
+
+func GetCurrentUserRole(ctx *gin.Context) (*string, error) {
+	userRole, exists := ctx.Get("role")
+	if !exists {
+		return nil, errors.New("Requesting user role not defined")
+	}
+
+	strValue, ok := userRole.(string)
+	if !ok {
+		return nil, errors.New("Invalid user role")
+	}
+	return &strValue, nil
 }

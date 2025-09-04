@@ -1,32 +1,143 @@
 p, super_admin, *, *
+
+p, admin, /api/v1/education/curricula/:id, GET
+p, student, /api/v1/education/curricula/:id, GET
+p, tutor, /api/v1/education/curricula/:id, GET
+p, teacher, /api/v1/education/curricula/:id, GET
+p, org_rep, /api/v1/education/curricula/:id, GET
+
+p, admin, /api/v1/education/curricula/, GET
+p, student, /api/v1/education/curricula/, GET
+p, tutor, /api/v1/education/curricula/, GET
+p, teacher, /api/v1/education/curricula/, GET
+p, org_rep, /api/v1/education/curricula/, GET
+
+p, admin, /api/v1/education/sub-topics/:id, GET
+p, student, /api/v1/education/sub-topics/:id, GET
+p, tutor, /api/v1/education/sub-topics/:id, GET
+p, teacher, /api/v1/education/sub-topics/:id, GET
+p, org_rep, /api/v1/education/sub-topics/:id, GET
+
+p, admin, /api/v1/education/sub-topics/, GET
+p, student, /api/v1/education/sub-topics/, GET
+p, tutor, /api/v1/education/sub-topics/, GET
+p, teacher, /api/v1/education/sub-topics/, GET
+p, org_rep, /api/v1/education/sub-topics/, GET
+
+p, admin, /api/v1/education/subjects/:id, GET
+p, student, /api/v1/education/subjects/:id, GET
+p, tutor, /api/v1/education/subjects/:id, GET
+p, teacher, /api/v1/education/subjects/:id, GET
+p, org_rep, /api/v1/education/subjects/:id, GET
+
+p, admin, /api/v1/education/subjects/, GET
+p, student, /api/v1/education/subjects/, GET
+p, tutor, /api/v1/education/subjects/, GET
+p, teacher, /api/v1/education/subjects/, GET
+p, org_rep, /api/v1/education/subjects/, GET
+
+p, admin, /api/v1/education/topics/:id, GET
+p, student, /api/v1/education/topics/:id, GET
+p, tutor, /api/v1/education/topics/:id, GET
+p, teacher, /api/v1/education/topics/:id, GET
+p, org_rep, /api/v1/education/topics/:id, GET
+
+p, admin, /api/v1/education/topics/, GET
+p, student, /api/v1/education/topics/, GET
+p, tutor, /api/v1/education/topics/, GET
+p, teacher, /api/v1/education/topics/, GET
+p, org_rep, /api/v1/education/topics/, GET
+
+p, admin, /api/v1/organization-subscriptions/, POST
+p, org_rep, /api/v1/organization-subscriptions/, POST
+
+p, admin, /api/v1/organization-subscriptions/:orgID/:planID, PATCH
+p, org_rep, /api/v1/organization-subscriptions/:orgID/:planID, PATCH
+
+p, admin, /api/v1/organization-subscriptions/:orgID/:planID, GET
+p, org_rep, /api/v1/organization-subscriptions/:orgID/:planID, GET
+
+p, admin, /api/v1/organization-subscriptions/, GET
+
+p, admin, /api/v1/organization-users/, POST
+p, org_rep, /api/v1/organization-users/, POST
+
+p, admin, /api/v1/organization-users/:userID/:orgID, PATCH
+p, org_rep, /api/v1/organization-users/:userID/:orgID, PATCH
+
+p, admin, /api/v1/organization-users/:userID/:orgID, GET
+p, org_rep, /api/v1/organization-users/:userID/:orgID, GET
+
+p, admin, /api/v1/organization-users/, GET
+p, org_rep, /api/v1/organization-users/, GET
+
 p, admin, /api/v1/organizations/, POST
-p, admin, /api/v1/organizations/:id, PATCH
-p, admin, /api/v1/organizations/, DELETE
+p, org_rep, /api/v1/organizations/, POST
+
+p, admin, /api/v1/organizations/:id, GET
+p, org_rep, /api/v1/organizations/:id, GET
+
 p, admin, /api/v1/organizations/, GET
+
+p, admin, /api/v1/organizations/:id, PATCH
+p, org_rep, /api/v1/organizations/:id, PATCH
+
+p, admin, /api/v1/organizations/:id, DELETE
+p, org_rep, /api/v1/organizations/:id, DELETE
+
 p, admin, /api/v1/subscription-plans/, POST
 p, admin, /api/v1/subscription-plans/:id, PATCH
 p, admin, /api/v1/subscription-plans/:id, DELETE
 p, admin, /api/v1/subscription-plans/:id, GET
 p, admin, /api/v1/subscription-plans/, GET
+
+p, admin, /api/v1/user-subscriptions/, POST
+p, student, /api/v1/user-subscriptions/, POST
+p, tutor, /api/v1/user-subscriptions/, POST
+p, teacher, /api/v1/user-subscriptions/, POST
+p, org_rep, /api/v1/user-subscriptions/, POST
+
+p, admin, /api/v1/user-subscriptions/:userID/:planID, GET
+p, student, /api/v1/user-subscriptions/:userID/:planID, GET
+p, tutor, /api/v1/user-subscriptions/:userID/:planID, GET
+p, teacher, /api/v1/user-subscriptions/:userID/:planID, GET
+p, org_rep, /api/v1/user-subscriptions/:userID/:planID, GET
+
+p, admin, /api/v1/user-subscriptions/, GET
+
+p, admin, /api/v1/user-subscriptions/:userID/:planID, PATCH
+p, student, /api/v1/user-subscriptions/:userID/:planID, PATCH
+p, tutor, /api/v1/user-subscriptions/:userID/:planID, PATCH
+p, teacher, /api/v1/user-subscriptions/:userID/:planID, PATCH
+p, org_rep, /api/v1/user-subscriptions/:userID/:planID, PATCH
+
 p, admin, /api/v1/users/, GET
-p, admin, /api/v1/users/, GET
-p, admin, /api/v1/users/, PATCH
-p, admin, /api/v1/users/, DELETE
-p, org_rep, /api/v1/organizations/, POST
-p, org_rep, /api/v1/organizations/, update_own
-p, org_rep, /api/v1/organizations/, GET
-p, student, /api/v1/users/, view_own
-p, student, /api/v1/users/, update_own
-p, student, /api/v1/users/, delete_own
-p, teacher, /api/v1/users/, view_own
-p, teacher, /api/v1/users/, update_own
-p, teacher, /api/v1/users/, delete_own
-p, tutor, /api/v1/users/, view_own
-p, tutor, /api/v1/users/, update_own
-p, tutor, /api/v1/users/, delete_own
+p, admin, /api/v1/users/:id, GET
+p, admin, /api/v1/users/:id, PATCH
+p, admin, /api/v1/users/:id, DELETE
+
+p, org_rep, /api/v1/users/:id, GET
+p, org_rep, /api/v1/users/:id, PATCH
+p, org_rep, /api/v1/users/:id, DELETE
+
+p, teacher, /api/v1/users/:id, GET
+p, teacher, /api/v1/users/:id, PATCH
+p, teacher, /api/v1/users/:id, DELETE
+
+p, student, /api/v1/users/:id, GET
+p, student, /api/v1/users/:id, PATCH
+p, student, /api/v1/users/:id, DELETE
+
+p, tutor, /api/v1/users/:id, GET
+p, tutor, /api/v1/users/:id, PATCH
+p, tutor, /api/v1/users/:id, DELETE
+
 p, student, /api/v1/subscription-plans/, GET
 p, teacher, /api/v1/subscription-plans/, GET
 p, tutor, /api/v1/subscription-plans/, GET
+p, student, /api/v1/subscription-plans/:id, GET
+p, teacher, /api/v1/subscription-plans/:id, GET
+p, tutor, /api/v1/subscription-plans/:id, GET
 
 g, admin, super_admin
 g, org_rep, student
