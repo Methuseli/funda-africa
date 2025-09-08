@@ -2,13 +2,15 @@ import Config
 
 # Configure your database
 config :funda_africa, FundaAfrica.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "funda_africa_dev",
-  stacktrace: true,
+  username: System.get_env("POSTGRES_USER") || "postgres",
+  password: System.get_env("POSTGRES_PASSWORD") || "#1Foofighters",
+  hostname: System.get_env("POSTGRES_HOST") || "localhost",
+  database: System.get_env("POSTGRES_DATABASE") || "funda_africa_phoenix",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true
+
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -19,11 +21,11 @@ config :funda_africa, FundaAfrica.Repo,
 config :funda_africa, FundaAfricaWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {127, 0, 0, 1}, port: String.to_integer(System.get_env("PORT") || "4000")],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "Q+LHOW38OT/7jaXbtSyue0Kz2c1RLfbwFVloM6ExWNrMAmFbgNg9T/6SLNQ7wMW1",
+  secret_key_base: System.get_env("SECRET_KEY_BASE") || "Q+LHOW38OT/7jaXbtSyue0Kz2c1RLfbwFVloM6ExWNrMAmFbgNg9T/6SLNQ7wMW1",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:funda_africa, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:funda_africa, ~w(--watch)]}
@@ -61,6 +63,10 @@ config :funda_africa, FundaAfricaWeb.Endpoint,
       ~r"lib/funda_africa_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
+
+config :funda_africa,
+  client_origin: System.get_env("CLIENT_ORIGIN") || "http://localhost:3000",
+  ai_gateway_url: System.get_env("AI_GATEWAY_URL") || "http://localhost:8001"
 
 # Enable dev routes for dashboard and mailbox
 config :funda_africa, dev_routes: true

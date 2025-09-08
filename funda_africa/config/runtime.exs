@@ -48,7 +48,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
+  host = System.get_env("PHX_HOST") || "localhost"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :funda_africa, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
@@ -64,6 +64,13 @@ if config_env() == :prod do
       port: port
     ],
     secret_key_base: secret_key_base
+
+  config :funda_africa,
+    jwt_secret: System.get_env("JWT_SECRET_KEY") || raise("JWT_SECRET_KEY missing"),
+    client_origin: System.get_env("CLIENT_ORIGIN") || "http://localhost:3000",
+    ai_gateway_url: System.get_env("AI_GATEWAY_URL") || "http://localhost:8001"
+
+  config :funda_africa, FundaRealtime.Finch, pools: %{default: 50}
 
   # ## SSL Support
   #
