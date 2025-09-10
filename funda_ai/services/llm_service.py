@@ -1,32 +1,30 @@
 # services/llm_service.py
 import httpx
 from typing import Dict, Any
+from google.genai import types
+
 
 class LLMError(Exception):
     pass
 
 class LLMService:
     """Simple OpenAI-compatible async wrapper. Replace or extend for other providers."""
-    def __init__(self, api_key: str, client: httpx.AsyncClient, api_url: str, default_model: str):
-        self.api_key = api_key
-        self.client = client
-        self.api_url = api_url
+    def __init__(self, default_model: str, thinking_budget: int):
         self.default_model = default_model
+        self.thinking_budget = thinking_budget
 
-    async def chat(self, system_prompt: str, user_prompt: str, model: str = None) -> Dict[str, Any]:
+    def chat(self, system_prompt: str, user_prompt: str = None, model: str = None) -> Dict[str, Any]:
         model = model or self.default_model
-        payload = {
-            "model": model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            "max_tokens": 1200
-        }
-        headers = {"Authorization": f"Bearer {self.api_key}"}
+        if user_prompt == None:
+            prompts = system_prompt
+        else:
+            prompts = user_prompt
         try:
-            resp = await self.client.post(self.api_url, json=payload, headers=headers, timeout=30.0)
-            resp.raise_for_status()
-            return resp.json()
+            response = self.client.models.generate_content(
+                model=self.default_model,
+                contents=prompts,
+                config=types.ThinkingConfig(thinking_budget=self.thinking_budget)
+            )
+            return response.text
         except httpx.HTTPError as exc:
             raise LLMError(f"LLM request failed: {exc}") from exc

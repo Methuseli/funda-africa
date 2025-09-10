@@ -21,9 +21,7 @@ async def lifespan(app: FastAPI):
 
     wolfram = WolframService(appid=settings.WOLFRAM_APPID, client=http_client)
     llm = LLMService(
-        api_key=settings.LLM_API_KEY,
-        client=http_client,
-        api_url=settings.LLM_API_URL,
+        thinking_budget=settings.THINKING_BUDGET,
         default_model=settings.DEFAULT_LLM_MODEL,
     )
     phoenix = PhoenixClient(
