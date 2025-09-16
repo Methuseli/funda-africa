@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from core.config import Settings
 from services.wolfram_service import WolframService
-from services.llm_service import LLMService
+from services.gemini_service import GeminiService
 from services.orchestration import Orchestrator
 from utils.phoenix_client import PhoenixClient
 from routers import ai as ai_router
@@ -20,9 +20,8 @@ async def lifespan(app: FastAPI):
     http_client = httpx.AsyncClient(timeout=30.0)
 
     wolfram = WolframService(appid=settings.WOLFRAM_APPID, client=http_client)
-    llm = LLMService(
-        thinking_budget=settings.THINKING_BUDGET,
-        default_model=settings.DEFAULT_LLM_MODEL,
+    llm = GeminiService(
+        api_key=settings.GEMINI_API_KEY
     )
     phoenix = PhoenixClient(
         endpoint=str(settings.PHOENIX_AI_INTERACTIONS_URL),
