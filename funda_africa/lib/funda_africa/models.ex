@@ -1,12 +1,14 @@
-defmodule FundaAfrica.Chat do
+defmodule FundaAfrica.Model do
   alias FundaAfrica.Chat.{
     ConversationOps,
     ConversationParticipantOps,
-    MessageOps,
-    AIInteractionOps,
-    LiveLessonOps,
-    LessonParticipantOps
+    MessageOps
   }
+  alias FundaAfrica.AI.AIInteractionOps
+  alias FundaAfrica.LiveLessons.{
+    LessonParticipantOps,
+    LiveLessonOps
+    }
 
   # Conversations
   defdelegate list_conversations, to: ConversationOps
@@ -46,7 +48,7 @@ defmodule FundaAfrica.Chat do
   defdelegate create_live_lesson(attrs), to: LiveLessonOps
   defdelegate update_live_lesson(lesson, attrs), to: LiveLessonOps
   defdelegate delete_live_lesson(lesson), to: LiveLessonOps
-  defdelegate list_by_teacher_lessons(teacher_id), to: LiveLessonOps, as: :list_by_teacher
+  defdelegate list_by_host(host_id), to: LiveLessonOps, as: :list_by_host
 
   # Lesson Participants
   defdelegate list_lesson_participants, to: LessonParticipantOps

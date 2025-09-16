@@ -6,7 +6,7 @@ defmodule FundaAfrica.Chat.ConversationParticipant do
   @foreign_key_type :binary_id
   schema "conversation_participants" do
     belongs_to :conversation, FundaAfrica.Chat.Conversation
-    belongs_to :user, FundaAfrica.Accounts.User
+    field :user, :binary_id
 
     field :role, :string
 
@@ -15,7 +15,7 @@ defmodule FundaAfrica.Chat.ConversationParticipant do
 
   def changeset(participant, attrs) do
     participant
-    |> cast(attrs, [:conversation_id, :user_id, :role])
-    |> validate_required([:conversation_id, :user_id])
+    |> cast(attrs, [:conversation_id, :user, :role])
+    |> validate_required([:conversation_id, :user])
   end
 end

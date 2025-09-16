@@ -19,4 +19,10 @@ defmodule FundaAfrica.LiveLessons.LiveLessonOps do
   end
 
   def delete_live_lesson(%LiveLesson{} = lesson), do: Repo.delete(lesson)
+
+  def list_by_host(host_id) do
+    LiveLesson
+    |> where(host: ^host_id)
+    |> Repo.all()
+  end
 end

@@ -6,7 +6,7 @@ defmodule FundaAfrica.LiveLessons.LessonParticipant do
   @foreign_key_type :binary_id
   schema "lesson_participants" do
     belongs_to :lesson, FundaAfrica.LiveLessons.LiveLesson
-    belongs_to :user, FundaAfrica.Accounts.User
+    field :user, :binary_id
 
     field :role, :string, default: "student"
 
@@ -15,7 +15,7 @@ defmodule FundaAfrica.LiveLessons.LessonParticipant do
 
   def changeset(participant, attrs) do
     participant
-    |> cast(attrs, [:lesson_id, :user_id, :role])
-    |> validate_required([:lesson_id, :user_id])
+    |> cast(attrs, [:lesson_id, :user, :role])
+    |> validate_required([:lesson_id, :user])
   end
 end

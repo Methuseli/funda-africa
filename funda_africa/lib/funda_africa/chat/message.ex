@@ -6,7 +6,7 @@ defmodule FundaAfrica.Chat.Message do
   @foreign_key_type :binary_id
   schema "messages" do
     belongs_to :conversation, FundaAfrica.Chat.Conversation
-    belongs_to :sender, FundaAfrica.Accounts.User
+    field :sender, :binary_id
 
     field :content, :string
     field :content_type, :string, default: "text"
@@ -16,7 +16,7 @@ defmodule FundaAfrica.Chat.Message do
 
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:conversation_id, :sender_id, :content, :content_type])
-    |> validate_required([:conversation_id, :sender_id, :content])
+    |> cast(attrs, [:conversation_id, :sender, :content, :content_type])
+    |> validate_required([:conversation_id, :sender, :content])
   end
 end

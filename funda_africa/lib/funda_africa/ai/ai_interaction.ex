@@ -5,7 +5,7 @@ defmodule FundaAfrica.AI.AIInteraction do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "ai_interactions" do
-    belongs_to :user, FundaAfrica.Accounts.User
+    field :user, :binary_id
 
     field :prompt, :string
     field :response, :string
@@ -17,7 +17,7 @@ defmodule FundaAfrica.AI.AIInteraction do
 
   def changeset(interaction, attrs) do
     interaction
-    |> cast(attrs, [:user_id, :prompt, :response, :model_used, :metadata])
-    |> validate_required([:user_id, :prompt, :response])
+    |> cast(attrs, [:user, :prompt, :response, :model_used, :metadata])
+    |> validate_required([:user, :prompt, :response])
   end
 end

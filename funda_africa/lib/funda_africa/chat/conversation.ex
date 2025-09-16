@@ -8,7 +8,7 @@ defmodule FundaAfrica.Chat.Conversation do
     field :title, :string
     field :type, :string
 
-    belongs_to :creator, FundaAfrica.Accounts.User, foreign_key: :created_by
+    field :creator, :binary_id
 
     has_many :participants, FundaAfrica.Chat.ConversationParticipant
     has_many :messages, FundaAfrica.Chat.Message
@@ -18,7 +18,7 @@ defmodule FundaAfrica.Chat.Conversation do
 
   def changeset(conversation, attrs) do
     conversation
-    |> cast(attrs, [:title, :type, :created_by])
-    |> validate_required([:type, :created_by])
+    |> cast(attrs, [:title, :type, :creator])
+    |> validate_required([:type, :creator])
   end
 end
