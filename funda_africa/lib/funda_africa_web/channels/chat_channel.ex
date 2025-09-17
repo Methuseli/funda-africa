@@ -41,38 +41,55 @@ defmodule FundaAfricaWeb.ChatChannel do
     end
   end
 
-  # Handles private, group, org, lesson, or lobby messages.
   def handle_in(
         "message:new",
-        %{"content" => content, "recipients" => recips, "conversation_id" => conv_id},
+        %{
+          "content" => content,
+          "recipients" => recips,
+          "conversation_id" => conv_id,
+          "content_type" => content_type
+        } = payload,
         socket
       ) do
     sender_id = socket.assigns.user_id
+
+    # Extract optional metadata for files/videos
+    file_name = Map.get(payload, "file_name")
+    file_size = Map.get(payload, "file_size")
+    file_url = Map.get(payload, "file_url")
 
     {:ok, message} =
       MessageOps.create_message(%{
         conversation_id: conv_id,
         sender: sender_id,
         content: content,
+        content_type: content_type,
         recipients: recips,
+        file_name: file_name,
+        file_size: file_size,
+        file_url: file_url,
         status: "pending"
       })
 
-    # ACK to sender only
+    # ACK to sender
     push(socket, "message:server_ack", %{message_id: message.id, status: "stored"})
 
-    # Create pending receipts for each recipient
+    # Create pending receipts
     Enum.each(recips, fn r ->
       MessageReceiptOps.create_receipt(message.id, r)
     end)
 
-    # Forward to recipients
+    # Broadcast to recipients
     Enum.each(recips, fn r ->
       FundaAfricaWeb.Endpoint.broadcast("chat:user:#{r}", "message:forwarded", %{
         message_id: message.id,
         conversation_id: conv_id,
         from: sender_id,
-        content: content
+        content_type: content_type,
+        content: content,
+        file_name: file_name,
+        file_size: file_size,
+        file_url: file_url
       })
     end)
 
