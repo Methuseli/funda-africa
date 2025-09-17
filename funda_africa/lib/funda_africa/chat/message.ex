@@ -10,6 +10,8 @@ defmodule FundaAfrica.Chat.Message do
 
     field :content, :string
     field :content_type, :string, default: "text"
+    field :status, :string, default: "pending"
+    field :recipients, {:array, :binary_id}
 
     timestamps()
   end
