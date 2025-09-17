@@ -57,7 +57,6 @@ defmodule FundaAfrica.Model do
   defdelegate list_by_lesson_participants(lesson_id), to: LessonParticipantOps, as: :list_by_lesson
 
   # Message Receipts
-  defdelegate create_message_receipt(attrs), to: MessageReceiptOps
   defdelegate update_status(message_id, recipient_id, status), to: MessageReceiptOps
   defdelegate list_for_message(message_id), to: MessageReceiptOps, as: :list_for_message
   defdelegate all_received?(message_id), to: MessageReceiptOps, as: :all_received?

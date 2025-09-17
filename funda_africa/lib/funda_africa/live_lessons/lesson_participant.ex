@@ -6,9 +6,7 @@ defmodule FundaAfrica.LiveLessons.LessonParticipant do
   @foreign_key_type :binary_id
   schema "lesson_participants" do
     belongs_to :lesson, FundaAfrica.LiveLessons.LiveLesson
-    field :user, :binary_id
-
-    field :role, :string, default: "student"
+    field :user, :binary_id 
 
     timestamps()
   end

@@ -14,17 +14,19 @@ defmodule FundaAfrica.Chat.Memberships do
   def topics_for_user(user_id) do
     conv_topics =
       from(c in Conversation,
-        join: p in ConversationParticipant, on: p.conversation_id == c.id,
+        join: p in ConversationParticipant,
+        on: p.conversation_id == c.id,
         where: p.user == ^user_id,
-        select: {"chat:#{c.type}:#{c.id}"}
+        select: fragment("concat('chat:', ?, ':', ?)", c.type, c.id)
       )
       |> Repo.all()
 
     lesson_topics =
       from(l in LiveLesson,
-        join: p in LessonParticipant, on: p.lesson_id == l.id,
+        join: p in LessonParticipant,
+        on: p.lesson_id == l.id,
         where: p.user == ^user_id,
-        select: {"chat:lesson:#{l.id}"}
+        select: fragment("concat('chat:lesson:', ?)", l.id)
       )
       |> Repo.all()
 

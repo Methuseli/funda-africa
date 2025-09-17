@@ -25,4 +25,13 @@ defmodule FundaAfrica.LiveLessons.LessonParticipantOps do
     |> where(lesson_id: ^lesson_id)
     |> Repo.all()
   end
+
+  def participant_exists?(lesson_id, user_id) do
+    query =
+      from(lp in LessonParticipant,
+        where: lp.lesson_id == ^lesson_id and lp.user == ^user_id,
+        select: count(lp.id)
+      )
+    Repo.one(query) > 0
+  end
 end

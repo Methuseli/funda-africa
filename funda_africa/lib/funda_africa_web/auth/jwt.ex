@@ -12,7 +12,7 @@ defmodule FundaAfricaWeb.Auth.JWT do
   @doc """
   Verifies a JWT token and returns {:ok, claims} or {:error, reason}.
   """
-  def verify(token) do
+  def verify_token(token) do
     signer = Joken.Signer.create("HS256", @jwt_secret)
 
     case Joken.verify(token, signer) do
@@ -25,7 +25,7 @@ defmodule FundaAfricaWeb.Auth.JWT do
   Returns the user_id (subject) if token is valid, otherwise :error.
   """
   def verify_and_get_user(token) do
-    case verify(token) do
+    case verify_token(token) do
       {:ok, claims} -> {:ok, claims["sub"]}
       _ -> :error
     end

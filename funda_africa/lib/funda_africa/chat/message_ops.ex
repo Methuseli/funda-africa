@@ -24,6 +24,7 @@ defmodule FundaAfrica.Chat.MessageOps do
   def list_by_conversation(conversation_id, page \\ 1, page_size \\ 20) do
     Message
     |> where(conversation_id: ^conversation_id)
+    |> order_by(desc: :inserted_at)
     |> Repo.paginate(page: page, page_size: page_size)
   end
 

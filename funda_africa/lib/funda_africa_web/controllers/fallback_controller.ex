@@ -7,5 +7,5 @@ defmodule FundaAfricaWeb.FallbackController do
     |> json(%{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)})
   end
 
-  defp translate_error({msg, opts}), do: Phoenix.Naming.humanize(msg)
+  defp translate_error({msg, _}), do: Phoenix.Naming.humanize(msg)
 end

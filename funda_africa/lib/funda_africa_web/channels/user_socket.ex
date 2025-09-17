@@ -20,8 +20,6 @@ defmodule FundaAfricaWeb.UserSocket do
     end
   end
 
-  def connect(_, _, _), do: :error
-
   def id(socket), do: "users_socket:#{socket.assigns.user_id}"
 
   # Extract bearer token from headers

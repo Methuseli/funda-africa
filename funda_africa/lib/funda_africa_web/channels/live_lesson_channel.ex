@@ -13,7 +13,14 @@ defmodule FundaAfricaWeb.LiveLessonChannel do
       Presence.track(socket, user_id, %{joined_at: DateTime.utc_now()})
 
       # Persist participant in DB
-      LessonParticipantOps.add_participant(lesson_id, user_id)
+      unless LessonParticipantOps.participant_exists?(lesson_id, user_id) do
+        attrs = %{
+          lesson_id: lesson_id,
+          user: user_id
+        }
+
+        LessonParticipantOps.create_lesson_participant(attrs)
+      end
 
       send(self(), :after_join)
       {:ok, socket}
@@ -24,7 +31,7 @@ defmodule FundaAfricaWeb.LiveLessonChannel do
 
   # After join, broadcast presence to all participants
   def handle_info(:after_join, socket) do
-    lesson_id = socket.topic |> String.replace_prefix("live_lesson:", "")
+    _ = socket.topic |> String.replace_prefix("live_lesson:", "")
     user_id = socket.assigns.user_id
 
     broadcast!(socket, "user:joined", %{user_id: user_id})
@@ -70,7 +77,7 @@ defmodule FundaAfricaWeb.LiveLessonChannel do
 
     # Ensure conversation exists
     conversation =
-      Repo.get_by(FundaAfrica.Chat.Conversation, type: "lesson", title: lesson_id)
+      FundaAfrica.Repo.get_by(FundaAfrica.Chat.Conversation, type: "lesson", id: lesson_id)
 
     # Save the message
     {:ok, msg} =
@@ -97,10 +104,10 @@ defmodule FundaAfricaWeb.LiveLessonChannel do
     Task.start(fn ->
       # Example: call your AI service via HTTP/gRPC
       # {:ok, transcript_text} = MyApp.AI.TranscriptionService.transcribe(audio)
-      transcript_text = "Simulated transcript for audio chunk"
+      transcript_text = "Simulated transcript for audio chunk #{audio}"
 
       # Save transcript
-      LessonTranscriptOps.create_transcript(%{
+      FundaAfrica.LiveLessons.LessonTranscriptOps.create_transcript(%{
         lesson_id: socket.assigns.lesson_id,
         user: user_id,
         content: transcript_text
@@ -126,7 +133,7 @@ defmodule FundaAfricaWeb.LiveLessonChannel do
 
     # Ensure conversation exists
     conversation =
-      Repo.get_by(FundaAfrica.Chat.Conversation, type: "lesson", title: lesson_id)
+      FundaAfrica.  Repo.get_by(FundaAfrica.Chat.Conversation, type: "lesson", title: lesson_id)
 
     # Persist message as a file type
     {:ok, msg} =
@@ -155,13 +162,10 @@ defmodule FundaAfricaWeb.LiveLessonChannel do
 
   def terminate(_reason, socket) do
     user_id = socket.assigns.user_id
-    lesson_id = socket.topic |> String.replace_prefix("live_lesson:", "")
+    _ = socket.topic |> String.replace_prefix("live_lesson:", "")
 
     # Remove from presence
     Presence.untrack(socket, user_id)
-
-    # Update DB
-    LessonParticipantOps.remove_participant(lesson_id, user_id)
 
     broadcast!(socket, "user:left", %{user_id: user_id})
     :ok

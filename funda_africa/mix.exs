@@ -9,7 +9,8 @@ defmodule FundaAfrica.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      compilers: Mix.compilers() ++ [:phoenix_swagger]
     ]
   end
 
@@ -60,7 +61,9 @@ defmodule FundaAfrica.MixProject do
       {:bandit, "~> 1.5"},
       {:joken, "~> 2.6"},
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.11.1"}
+      {:ex_json_schema, "~> 0.11.1"},
+      {:scrivener_ecto, "~> 2.7"},
+      {:poison, "~> 6.0"}
     ]
   end
 

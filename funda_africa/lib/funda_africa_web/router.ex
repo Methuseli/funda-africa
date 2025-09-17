@@ -12,6 +12,7 @@ defmodule FundaAfricaWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+    plug PhoenixSwagger.Plug.Validate
   end
 
   pipeline :auth do

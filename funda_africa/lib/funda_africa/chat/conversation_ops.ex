@@ -37,4 +37,6 @@ defmodule FundaAfrica.Chat.ConversationOps do
     |> order_by(desc: :inserted_at)
     |> Repo.paginate(page: page, page_size: page_size)
   end
+
+  def delete_conversation(%Conversation{} = conversation), do: Repo.delete(conversation)
 end

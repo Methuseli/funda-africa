@@ -25,4 +25,14 @@ defmodule FundaAfrica.LiveLessons.LiveLessonOps do
     |> where(host: ^host_id)
     |> Repo.all()
   end
+
+  @doc """
+  Returns true if the lesson is joinable (scheduled or active).
+  """
+  def lesson_active?(lesson_id) do
+    case Repo.get(LiveLesson, lesson_id) do
+      %LiveLesson{status: status} when status in ["scheduled", "active"] -> true
+      _ -> false
+    end
+  end
 end
