@@ -12,12 +12,9 @@ defmodule FundaAfrica.Model do
     }
 
   # Conversations
-  defdelegate list_conversations, to: ConversationOps
-  defdelegate get_conversation!(id), to: ConversationOps
-  defdelegate create_conversation(attrs), to: ConversationOps
-  defdelegate update_conversation(conversation, attrs), to: ConversationOps
-  defdelegate delete_conversation(conversation), to: ConversationOps
-  defdelegate list_by_creator(user_id), to: ConversationOps
+  defdelegate create_conversation(attrs, participants), to: ConversationOps
+  defdelegate add_participant(conv_id, user_id), to: ConversationOps
+  defdelegate list_by_user(user_id, page \\ 1, page_size \\ 20), to: ConversationOps
 
   # Conversation Participants
   defdelegate list_conversation_participants, to: ConversationParticipantOps

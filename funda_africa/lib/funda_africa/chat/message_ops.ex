@@ -21,10 +21,10 @@ defmodule FundaAfrica.Chat.MessageOps do
 
   def delete_message(%Message{} = message), do: Repo.delete(message)
 
-  def list_by_conversation(conversation_id) do
+  def list_by_conversation(conversation_id, page \\ 1, page_size \\ 20) do
     Message
     |> where(conversation_id: ^conversation_id)
-    |> Repo.all()
+    |> Repo.paginate(page: page, page_size: page_size)
   end
 
   def update_status(message_id, status) when status in ["pending", "received", "read"] do

@@ -2,28 +2,35 @@ defmodule FundaAfricaWeb.Router do
   use FundaAfricaWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, html: {FundaAfricaWeb.Layouts, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, html: {FundaAfricaWeb.Layouts, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
-  scope "/", FundaAfricaWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
+  pipeline :auth do
+    plug(FundaAfricaWeb.Plugs.Auth)
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", FundaAfricaWeb do
-  #   pipe_through :api
-  # end
+  scope "/api/swagger" do
+    forward("/", PhoenixSwagger.Plug.SwaggerUI,
+      otp_app: :funda_africa,
+      swagger_file: "swagger.json"
+    )
+  end
+
+  scope "/api/v1", FundaAfricaWeb do
+    pipe_through([:api, :auth])
+
+    resources("/conversations", ConversationController, only: [:index, :show, :create, :delete])
+    get("/conversations/:id/messages", MessageController, :index)
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:funda_africa, :dev_routes) do
@@ -35,10 +42,10 @@ defmodule FundaAfricaWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: FundaAfricaWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: FundaAfricaWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end
