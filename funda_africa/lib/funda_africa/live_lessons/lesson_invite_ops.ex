@@ -1,11 +1,11 @@
-defmodule FundaAfrica.Lessons.InviteOps do
+defmodule FundaAfrica.LiveLessons.InviteOps do
   @moduledoc """
   Operations for managing lesson invites.
   """
 
   import Ecto.Query, warn: false
   alias FundaAfrica.Repo
-  alias FundaAfrica.Lessons.Invite
+  alias FundaAfrica.LiveLessons.Invite
 
   # Create a new invite
   def create_invite(attrs) do
@@ -39,7 +39,8 @@ defmodule FundaAfrica.Lessons.InviteOps do
   # List all invites for a given user (either inviter or invitee)
   def list_for_user(user_id, page \\ 1, page_size \\ 20) do
     Invite
-    |> where([i], i.invitee_id == ^user_id, i.is_active == true)
+    |> where([i], i.invitee_id == ^user_id)
+    |> where([i], i.is_active == true)
     |> Repo.paginate(page: page, page_size: page_size)
   end
 

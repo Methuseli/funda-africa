@@ -12,17 +12,17 @@ defmodule FundaAfricaWeb.AIChannel do
   end
 
   # Handle user prompt
-  def handle_in("ai:query", %{"prompt" => prompt}, socket) do
+  def handle_in("ai:query", params, socket) do
     user_id = socket.assigns.user_id
 
     # Persist the user prompt immediately with empty response
     {:ok, interaction} =
       AIInteractionOps.create_ai_interaction(%{
         user: user_id,
-        prompt: prompt,
+        prompt:  Map.get(params, "prompt"),
         response: "",
         model_used: nil,
-        metadata: %{}
+        metadata: %{},
         conversation_id: Map.get(params, "conversation_id"),
         topic: Map.get(params, "topic")
       })
@@ -34,7 +34,7 @@ defmodule FundaAfricaWeb.AIChannel do
 
       # TODO: replace with real call to FastAPI/gRPC AI service
       Process.sleep(1000)
-      ai_response = "Simulated AI answer for: #{prompt}"
+      ai_response = "Simulated AI answer for: #{Map.get(params, "prompt")}"
       model_used = "simulated-model-v1"
 
       # Save AI response to the database

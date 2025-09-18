@@ -1,6 +1,10 @@
 defmodule FundaAfricaWeb.LiveLessonController do
-  user(FundaAfricaWeb, :controller)
+  use FundaAfricaWeb, :controller
   alias FundaAfrica.LiveLessons.LiveLessonOps
+  alias FundaAfrica.LiveLessons.LessonParticipantOps
+  alias FundaAfrica.LiveLessons.LessonTranscriptOps
+  alias FundaAfrica.Chat.MessageOps
+  alias FundaAfrica.LiveLessons.InviteOps
 
   action_fallback(FundaAfricaWeb.FallbackController)
 
@@ -14,10 +18,15 @@ defmodule FundaAfricaWeb.LiveLessonController do
       status: "scheduled"
     }
 
-    case LiveLessonOps.create_lesson(attrs) do
+    case LiveLessonOps.create_live_lesson(attrs) do
       {:ok, lesson} ->
         # generate invite code (uuid or random string)
-        invite = InviteOps.generate_for_lesson(lesson.id)
+        attrs = %{
+          lesson_id: lesson.id,
+          is_active: true,
+          metadata: %{}
+        }
+        invite = InviteOps.create_invite(attrs)
         json(conn, %{lesson: lesson, invite: invite})
 
       {:error, changeset} ->

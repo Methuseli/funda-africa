@@ -1,5 +1,6 @@
 defmodule FundaAfricaWeb.Router do
   use FundaAfricaWeb, :router
+  use PhoenixSwagger
 
   pipeline :browser do
     plug(:accepts, ["html"])

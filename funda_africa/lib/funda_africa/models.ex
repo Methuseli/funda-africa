@@ -5,11 +5,14 @@ defmodule FundaAfrica.Model do
     MessageOps,
     MessageReceiptOps
   }
+
   alias FundaAfrica.AI.AIInteractionOps
+
   alias FundaAfrica.LiveLessons.{
     LessonParticipantOps,
-    LiveLessonOps
-    }
+    LiveLessonOps,
+    InviteOps
+ }
 
   # Conversations
   defdelegate create_conversation(attrs, participants), to: ConversationOps
@@ -30,7 +33,10 @@ defmodule FundaAfrica.Model do
   defdelegate create_message(attrs), to: MessageOps
   defdelegate update_message(message, attrs), to: MessageOps
   defdelegate delete_message(message), to: MessageOps
-  defdelegate list_by_conversation_messages(conversation_id), to: MessageOps, as: :list_by_conversation
+
+  defdelegate list_by_conversation_messages(conversation_id),
+    to: MessageOps,
+    as: :list_by_conversation
 
   # AI Interactions
   defdelegate list_ai_interactions, to: AIInteractionOps
@@ -54,10 +60,16 @@ defmodule FundaAfrica.Model do
   defdelegate create_lesson_participant(attrs), to: LessonParticipantOps
   defdelegate update_lesson_participant(participant, attrs), to: LessonParticipantOps
   defdelegate delete_lesson_participant(participant), to: LessonParticipantOps
-  defdelegate list_by_lesson_participants(lesson_id), to: LessonParticipantOps, as: :list_by_lesson
+
+  defdelegate list_by_lesson_participants(lesson_id),
+    to: LessonParticipantOps,
+    as: :list_by_lesson
 
   # Message Receipts
   defdelegate update_status(message_id, recipient_id, status), to: MessageReceiptOps
   defdelegate list_for_message(message_id), to: MessageReceiptOps, as: :list_for_message
   defdelegate all_received?(message_id), to: MessageReceiptOps, as: :all_received?
+
+  # Lesson Invites
+  defdelegate create_invite(attrs), to: InviteOps
 end
