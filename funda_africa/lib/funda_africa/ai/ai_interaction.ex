@@ -5,12 +5,14 @@ defmodule FundaAfrica.AI.AIInteraction do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "ai_interactions" do
+    belongs_to :conversation, FundaAfrica.Conversations.Conversation
     field :user, :binary_id
 
     field :prompt, :string
     field :response, :string
     field :model_used, :string
     field :metadata, :map
+    field :topic, :string
 
     timestamps()
   end

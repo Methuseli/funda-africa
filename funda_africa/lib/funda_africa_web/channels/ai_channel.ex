@@ -23,6 +23,8 @@ defmodule FundaAfricaWeb.AIChannel do
         response: "",
         model_used: nil,
         metadata: %{}
+        conversation_id: Map.get(params, "conversation_id"),
+        topic: Map.get(params, "topic")
       })
 
     # Start async task for AI response
@@ -45,11 +47,12 @@ defmodule FundaAfricaWeb.AIChannel do
       push(socket, "ai:response", %{
         response: ai_response,
         model_used: model_used,
-        interaction_id: interaction.id
+        interaction_id: interaction.id,
+        conversation_id: Map.get(params, "conversation_id"),
+        topic: Map.get(params, "topic")
       })
     end)
 
     {:noreply, socket}
   end
 end
-  

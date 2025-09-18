@@ -30,6 +30,11 @@ defmodule FundaAfricaWeb.Router do
     pipe_through([:api, :auth])
 
     resources("/conversations", ConversationController, only: [:index, :show, :create, :delete])
+    resources("/live-lessons", LiveLessonController, only: [:create, :show, :update])
+    get("/live-lessons/host", LiveLessonController, :list_by_host)
+    get("/live-lessons/participant", LiveLessonController, :list_by_participant)
+    get("/conversations/ai", AIInteractionController, :index)
+    get("/conversations/ai/:conversation_id", AIInteractionController, :show )
     get("/conversations/:id/messages", MessageController, :index)
   end
 

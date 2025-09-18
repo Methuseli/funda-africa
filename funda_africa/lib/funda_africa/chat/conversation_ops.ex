@@ -38,5 +38,13 @@ defmodule FundaAfrica.Chat.ConversationOps do
     |> Repo.paginate(page: page, page_size: page_size)
   end
 
+  def list_user_ai_conversations(user_id, page \\ 1, page_size \\ 20) do
+    Conversation
+    |> where([c], c.type == "ai")
+    |> join(:inner, [c], p in assoc(c, :participants))
+    |> where([c, p], p.user == ^user_id)
+    |> Repo.paginate(page: page, page_size: page_size)
+  end
+
   def delete_conversation(%Conversation{} = conversation), do: Repo.delete(conversation)
 end

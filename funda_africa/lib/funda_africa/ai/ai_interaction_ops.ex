@@ -25,4 +25,10 @@ defmodule FundaAfrica.AI.AIInteractionOps do
     |> where(user_id: ^user_id)
     |> Repo.all()
   end
+
+  def list_by_conversation(conversation_id, page \\ 1, page_size \\ 20) do
+    AIInteraction
+    |> where(conversation_id: ^conversation_id)
+    |> Repo.paginate(page: page, page_size: page_size)
+  end
 end
